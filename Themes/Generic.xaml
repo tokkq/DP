@@ -1,0 +1,26 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:DailyProject_221204"
+    >
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/DailyProject_221204;component/Themes/DetailedTextBoxDefaultStyle.xaml" />
+        <ResourceDictionary Source="/DailyProject_221204;component/Themes/TaskListItemViewDefaultStyle.xaml" />
+        <ResourceDictionary Source="/DailyProject_221204;component/Themes/DPComboBoxStyle.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style
+        BasedOn="{StaticResource DetailedTextBoxDefaultStyle}"
+        TargetType="{x:Type local:DetailedTextBox}"
+        />
+    <Style
+        BasedOn="{StaticResource TaskListItemViewDefaultStyle}"
+        TargetType="{x:Type local:TaskListItemView}"
+        />
+    <Style
+        BasedOn="{StaticResource DPComboBoxStyle}"
+        TargetType="{x:Type local:DPComboBox}"
+        />
+
+</ResourceDictionary>

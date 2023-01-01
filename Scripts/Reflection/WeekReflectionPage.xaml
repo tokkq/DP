@@ -1,0 +1,221 @@
+﻿<Page
+    x:Class="DailyProject_221204.WeekReflectionPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="WeekReflectionPage"
+    d:DesignHeight="1024"
+    d:DesignWidth="512"
+    Style="{DynamicResource StandardPageStyle}"
+    mc:Ignorable="d"
+    >
+
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+
+        <StackPanel Margin="4">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="30" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="30" />
+
+                </Grid.ColumnDefinitions>
+
+                <Separator
+                    Grid.Column="0"
+                    Opacity="0"
+                    >
+
+                </Separator>
+
+                <Label
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    Content="0001/01/01"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    >
+
+                </Label>
+
+                <Separator
+                    Grid.Column="2"
+                    Opacity="0"
+                    >
+
+                </Separator>
+
+            </Grid>
+
+            <Separator
+                Height="4"
+                Opacity="0"
+                >
+
+            </Separator>
+
+            <Border
+                BorderBrush="White"
+                BorderThickness="1"
+                CornerRadius="2"
+                >
+
+                <StackPanel Margin="8">
+
+                    <Label
+                        Content="先週の目標"
+                        Foreground="White"
+                        >
+
+                    </Label>
+
+                    <TextBlock
+                        Height="64"
+                        Padding="2"
+                        Background="Black"
+                        Foreground="White"
+                        Text="{Binding Reflection.Model.GoodPointText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        >
+
+                    </TextBlock>
+
+                    <Separator
+                        Height="4"
+                        Opacity="0"
+                        >
+
+                    </Separator>
+
+                    <Label
+                        Content="達成度"
+                        Foreground="White"
+                        >
+
+                    </Label>
+
+                    <Slider
+                        Foreground="White"
+                        IsSnapToTickEnabled="True"
+                        LargeChange="20"
+                        Maximum="100"
+                        SmallChange="20"
+                        TickFrequency="20"
+                        TickPlacement="BottomRight"
+                        Value="{Binding ThisWeekReflection.Model.LastWeekTargetCompleteRate, Mode=TwoWay}"
+                        >
+
+                    </Slider>
+
+                    <Separator
+                        Height="4"
+                        Opacity="0"
+                        >
+
+                    </Separator>
+
+                    <Label
+                        Content="どうすれば達成度を100％にできるか？"
+                        Foreground="White"
+                        >
+
+                    </Label>
+
+                    <TextBox Text="{Binding ThisWeekReflection.Model.LastWeekTargetReflectionText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                    </TextBox>
+
+                </StackPanel>
+
+            </Border>
+
+            <Separator
+                Height="4"
+                Opacity="0"
+                >
+
+            </Separator>
+
+            <Border
+                BorderBrush="White"
+                BorderThickness="1"
+                CornerRadius="2"
+                >
+
+                <StackPanel Margin="8">
+
+                    <Label
+                        Content="先週のよかった点"
+                        Foreground="White"
+                        >
+
+                    </Label>
+
+                    <TextBox Text="{Binding ThisWeekReflection.Model.GoodPointText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                    </TextBox>
+
+                    <Separator
+                        Height="4"
+                        Opacity="0"
+                        >
+
+                    </Separator>
+
+                    <Label
+                        Content="先週の変えたい点"
+                        Foreground="White"
+                        >
+
+                    </Label>
+
+                    <TextBox Text="{Binding ThisWeekReflection.Model.ChangePointText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                    </TextBox>
+
+                    <Separator
+                        Height="4"
+                        Opacity="0"
+                        >
+
+                    </Separator>
+
+                    <Label
+                        Content="今週の目標"
+                        Foreground="White"
+                        >
+
+                    </Label>
+
+                    <TextBox Text="{Binding ThisWeekReflection.Model.TargetText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                    </TextBox>
+
+                </StackPanel>
+
+            </Border>
+
+            <Separator
+                Height="8"
+                Opacity="0"
+                >
+
+            </Separator>
+
+            <Button
+                Height="32"
+                Command="{Binding SwitchPageToNextCommand}"
+                Content="完了"
+                >
+
+            </Button>
+
+        </StackPanel>
+
+    </ScrollViewer>
+
+</Page>

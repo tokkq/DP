@@ -1,0 +1,184 @@
+﻿<Page x:Class="DailyProject_221204.TodayReflectionPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DailyProject_221204"
+      mc:Ignorable="d" 
+      Style="{DynamicResource StandardPageStyle}"
+      d:DesignHeight="1024" d:DesignWidth="512"
+      Title="TodayReflectionPage">
+
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+
+        <StackPanel Margin="4">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="30"/>
+
+                </Grid.ColumnDefinitions>
+
+                <Separator Grid.Column="0" Opacity="0">
+
+                </Separator>
+
+                <Label Grid.Column="1" FontWeight="Bold" FontSize="24" HorizontalAlignment="Center" Content="0001/01/01" Foreground="White">
+
+                </Label>
+
+                <Separator Grid.Column="2" Opacity="0">
+
+                </Separator>
+
+            </Grid>
+
+            <Separator Height="4" Opacity="0">
+
+            </Separator>
+
+            <Border BorderBrush="White" BorderThickness="1" CornerRadius="2">
+
+                <StackPanel Margin="8">
+
+                    <Label Content="昨日の目標" Foreground="White">
+
+                    </Label>
+
+                    <TextBlock Text="{Binding Reflection.Model.GoodPointText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="White" Background="Black" Height="64" Padding="2">
+
+                    </TextBlock>
+
+                    <Separator Height="4" Opacity="0">
+
+                    </Separator>
+
+                    <Label Content="達成度" Foreground="White">
+
+                    </Label>
+
+                    <Slider Value="{Binding TodayReflection.Model.YesterdayTargetCompleteRate, Mode=TwoWay}" Foreground="White" TickFrequency="20" Maximum="100" TickPlacement="BottomRight" SmallChange="20" LargeChange="20" IsSnapToTickEnabled="True">
+
+                    </Slider>
+
+                    <Separator Height="4" Opacity="0">
+
+                    </Separator>
+
+                    <Label Content="どうすれば達成度を100％にできるか？" Foreground="White">
+
+                    </Label>
+
+                    <TextBox Text="{Binding TodayReflection.Model.YesterdayTargetReflectionText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" Foreground="White" Background="Black" Height="64" Padding="2" VerticalContentAlignment="Center">
+
+                    </TextBox>
+
+                </StackPanel>
+
+            </Border>
+
+            <Separator Height="4" Opacity="0">
+
+            </Separator>
+
+            <Border BorderBrush="White" BorderThickness="1" CornerRadius="2">
+
+                <StackPanel Margin="8">
+
+                    <Label Content="今週の目標" Foreground="White">
+
+                    </Label>
+
+                    <TextBlock Text="{Binding Reflection.Model.GoodPointText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Foreground="White" Background="Black" Height="64" Padding="2">
+
+                    </TextBlock>
+
+                    <Separator Height="4" Opacity="0">
+
+                    </Separator>
+
+                    <Label Content="達成度" Foreground="White">
+
+                    </Label>
+
+                    <Slider Value="{Binding TodayReflection.Model.WeekTargetCompleteRate, Mode=TwoWay}" Foreground="White" TickFrequency="20" Maximum="100" TickPlacement="BottomRight" SmallChange="20" LargeChange="20" IsSnapToTickEnabled="True">
+
+                    </Slider>
+
+                    <Separator Height="4" Opacity="0">
+
+                    </Separator>
+
+                    <Label Content="どうすれば達成度を100％にできるか？" Foreground="White">
+
+                    </Label>
+
+                    <TextBox Text="{Binding TodayReflection.Model.WeekTargetReflectionText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" Foreground="White" Background="Black" Height="64" Padding="2" VerticalContentAlignment="Center">
+
+                    </TextBox>
+
+                </StackPanel>
+
+            </Border>
+
+            <Separator Height="4" Opacity="0">
+
+            </Separator>
+
+            <Border BorderBrush="White" BorderThickness="1" CornerRadius="2">
+
+                <StackPanel Margin="8">
+
+                    <Label Content="昨日のよかった点" Foreground="White">
+
+                    </Label>
+
+                    <TextBox Text="{Binding TodayReflection.Model.GoodPointText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" Foreground="White" Background="Black" Height="64" Padding="2" VerticalContentAlignment="Center">
+
+                    </TextBox>
+
+                    <Separator Height="4" Opacity="0">
+
+                    </Separator>
+
+                    <Label Content="昨日の変えたい点" Foreground="White">
+
+                    </Label>
+
+                    <TextBox Text="{Binding TodayReflection.Model.ChangePointText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" Foreground="White" Background="Black" Height="64" Padding="2" VerticalContentAlignment="Center">
+
+                    </TextBox>
+
+                    <Separator Height="4" Opacity="0">
+
+                    </Separator>
+
+                    <Label Content="今日の目標" Foreground="White">
+
+                    </Label>
+
+                    <TextBox Text="{Binding TodayReflection.Model.TargetText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" AcceptsReturn="True" Foreground="White" Background="Black" Height="64" Padding="2" VerticalContentAlignment="Center">
+
+                    </TextBox>
+
+                </StackPanel>
+
+            </Border>
+
+            <Separator Height="8" Opacity="0">
+
+            </Separator>
+
+            <Button Command="{Binding SwitchPageToNextCommand}" Content="完了" Height="32">
+
+            </Button>
+
+        </StackPanel>
+
+    </ScrollViewer>
+    
+</Page>
