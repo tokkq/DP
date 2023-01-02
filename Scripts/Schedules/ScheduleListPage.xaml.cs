@@ -21,7 +21,7 @@ namespace DailyProject_221204
 
             _scheduleListPageDataContext = new(taskManagementPageDataContext);
 
-            this.SetDataContext(_scheduleListPageDataContext);
+            this.SetPageDataContext(_scheduleListPageDataContext);
         }
     }
 
