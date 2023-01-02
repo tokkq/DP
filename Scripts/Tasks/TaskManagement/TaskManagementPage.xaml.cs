@@ -30,7 +30,7 @@ namespace DailyProject_221204
             InitializeComponent();
 
             var context = new TaskManagementPageDataContext();
-            this.BindDispose(context);
+            this.Subscribe(context);
 
             _taskEditorPage = new TaskEditorPage(context);
             _taskListPage = new TaskListPage(context);

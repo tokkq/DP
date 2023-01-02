@@ -17,11 +17,11 @@ namespace DailyProject_221204
         /// <summary>
         /// タスクの状態
         /// </summary>
-        public TaskStatusModel Status { get; } = new();
+        public TaskStatusModel Status { get; set; } = new();
         /// <summary>
         /// タスクに関するコメント
         /// </summary>
-        public List<CommentModel> Comments { get; } = new();
+        public List<CommentModel> Comments { get; set; } = new();
 
         /// <summary>
         /// 私にとっての重要度

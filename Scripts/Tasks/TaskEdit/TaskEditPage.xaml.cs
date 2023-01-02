@@ -29,8 +29,8 @@ namespace DailyProject_221204
 
             DataContext = this;
 
-            this.BindDispose(context.SelectEventPublisher.Subscribe(_onTaskSelect));
-            this.BindDispose(Task.ChangeStatusCommand.Subscribe(() => context.StatusUpdateEventPublisher.Publish(Task.Model)));
+            this.Subscribe(context.SelectEventPublisher.Subscribe(_onTaskSelect));
+            this.Subscribe(Task.ChangeStatusCommand.Subscribe(() => context.StatusUpdateEventPublisher.Publish(Task.Model)));
         }
 
         void _onTaskSelect(TaskModel model)

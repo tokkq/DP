@@ -53,11 +53,6 @@ namespace DailyProject_221204
 
         public bool CanExecute(object? parameter)
         {
-            if (parameter == null)
-            {
-                throw new ArgumentNullException($"[parameter: {parameter}]引数付きのコマンドですが、引数がNullです。");
-            }
-
             return _getCanExecute.Invoke();
         }
 

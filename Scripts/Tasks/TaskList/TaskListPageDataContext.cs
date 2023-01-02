@@ -19,59 +19,63 @@ namespace DailyProject_221204
         readonly static string _taskJsonFilePath = Path.Combine(PathDefinition.TaskJsonDirectoryPath, "Tasks.json");
 
         TaskListItems _tasks = new();
+        ISaveDataHandler<List<TaskModel>> _taskSaveDataHandler= null!;
 
         public TaskListPageDataContext(TaskManagementPageDataContext context)
         {
-            AddTaskCommand = new StandardCommand(_addNewTask);
+            AddTaskCommand = new StandardCommand(__addNewTask);
+            void __addNewTask(object? param)
+            {
+                var item = new TaskListItemViewModel(new TaskModel()
+                {
+                    Name = "NewTask",
+                    Description = "",
+                    StartAt = DateTime.Now,
+                    CreateAt = DateTime.Now,
+                    UpdateAt = DateTime.Now,
+                });
+
+                DPDebug.WriteLine($"[Name: {item.Model.Name}]AddNewTask");
+
+                _tasks.Add(item);
+            }
 
             _subscribe(_tasks);
             _subscribe(_tasks.SubscribeCollectionChange(() => _notifyUpdateView()));
             _subscribe(_tasks.SubscribeSelect(vm => context.SelectEventPublisher.Publish(vm.Model)));
             _subscribe(_tasks.SubscribeAddSchedule(vm => context.AddScheduleEventPublisher.Publish(vm.Model)));
 
-            context.AddAutoSave(_saveTasks);
+            context.AddAutoSave(SaveData);
             _subscribe(context.StatusUpdateEventPublisher.Subscribe(vm => _notifyUpdateView()));
+
+            _taskSaveDataHandler = _registerSaveData<List<TaskModel>>(_taskJsonFilePath);
 
             _addViewProperty(nameof(ActiveTasks));
             _addViewProperty(nameof(WaitTasks));
             _addViewProperty(nameof(IdeaTasks));
             _addViewProperty(nameof(CompleteTasks));
-
-            _loadTasks();
-            _notifyUpdateView();
         }
 
-        void _saveTasks()
+        protected override void _onLoaded()
         {
-            var taskModels = _tasks.Select(vm => vm.Model).ToList();
-            JsonUtility.SaveJson(taskModels, _taskJsonFilePath);
-        }
-        void _loadTasks()
-        {
-            var taskModels = JsonUtility.LoadJson<List<TaskModel>>(_taskJsonFilePath, shouldCreateNewFileIfNoExistJson:true);
+            base._onLoaded();
 
             _tasks.Clear();
-            foreach (var model in taskModels)
+            foreach (var model in _taskSaveDataHandler.GetValue())
             {
                 var viewModel = new TaskListItemViewModel(model);
                 _tasks.Add(viewModel);
             }
+
+            _notifyUpdateView();
         }
 
-        void _addNewTask(object? param)
+        protected override void _onUnloaded()
         {
-            var item = new TaskListItemViewModel(new TaskModel()
-            {
-                Name = "NewTask",
-                Description = "",
-                StartAt = DateTime.Now,
-                CreateAt = DateTime.Now,
-                UpdateAt = DateTime.Now,
-            });
+            base._onUnloaded();
 
-            DPDebug.WriteLine($"[Name: {item.Model.Name}]AddNewTask");
-
-            _tasks.Add(item);
+            var taskModels = _tasks.Select(vm => vm.Model).ToList();
+            _taskSaveDataHandler.SetValue(taskModels);
         }
     }
 }
