@@ -18,7 +18,7 @@ namespace DailyProject_221204
             InitializeComponent();
 
             _taskListPageDataContext = new TaskListPageDataContext(context);
-            this.SetDataContext(_taskListPageDataContext);
+            this.SetPageDataContext(_taskListPageDataContext);
         }
     }
 }

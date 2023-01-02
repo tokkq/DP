@@ -9,7 +9,7 @@ namespace DailyProject_221204
     static class JsonUtility
     {
         public static int SaveJson<T>(T value, string saveFilePath)
-            where T : new()
+            where T : class, new()
         {
             var extension = Path.GetExtension(saveFilePath);
             if (extension != ".json")
@@ -49,7 +49,7 @@ namespace DailyProject_221204
         }
 
         public static T LoadJson<T>(string path, bool shouldCreateNewFileIfNoExistJson = false)
-            where T : new()
+            where T : class, new()
         {
             var existJsonFile = File.Exists(path) == true;
             var shouldCreateNewFile = existJsonFile == false && shouldCreateNewFileIfNoExistJson == true;
@@ -62,6 +62,7 @@ namespace DailyProject_221204
             {
                 Encoder = JavaScriptEncoder.Create(UnicodeRanges.All),
                 WriteIndented = true,
+                MaxDepth = 16,
             };
             using (var file = File.OpenText(path))
             {

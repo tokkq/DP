@@ -33,7 +33,7 @@ namespace DailyProject_221204
             
             _mainDisplayPageSwitcher = _instanceMainDisplayPageSwitcher();
 
-            this.BindDispose(_dpMainWindowDataContext.SubscribeSwitchPage(_onSwitchPage));
+            this.Subscribe(_dpMainWindowDataContext.SubscribeSwitchPage(_onSwitchPage));
         }
 
         PageSwitcher _instanceMainDisplayPageSwitcher()
