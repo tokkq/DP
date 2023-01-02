@@ -17,4 +17,12 @@ namespace DailyProject_221204
             return PageType.WeekReflection;
         }
     }
+
+    public class AbstractWindowDataContect
+    {
+        public AbstractWindowDataContect()
+        {
+
+        }
+    }
 }
