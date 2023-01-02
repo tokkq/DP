@@ -10,34 +10,53 @@ namespace DailyProject_221204
     /// <summary>
     /// UIElement.DataContextに指定するクラスの抽象クラス。
     /// </summary>
-    public abstract class AbstractPageDataContext : INotifyPropertyChanged, IDisposable
+    public abstract class AbstractPageDataContext : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
-
+        
+        /// <summary>
+        /// XAMLからViewを更新させる用のコマンド
+        /// </summary>
         public EventCommand UpdateViewCommand = new();
 
-        readonly DisposeComposer _disposeComposer = new();
+        /// <summary>
+        /// Unload時に破棄されるDisposables
+        /// </summary>
+        readonly protected DisposeComposer _unloadDisposables = new();
+        
         readonly HashSet<string> _viewProperties = new();
         readonly HashSet<ISaveData> _saveDataSet = new();
 
         protected AbstractPageDataContext()
         {
-            _subscriber.Subscribe(UpdateViewCommand.Subscribe(_notifyUpdateView));
+            _unloadDisposables.Add(UpdateViewCommand.Subscribe(_notifyUpdateView));
         }
 
+        /// <summary>
+        /// FrameworkElementのLoadedイベントに紐づけられる関数
+        /// </summary>
         public void OnLoaded()
         {
             LoadData();
 
             _onLoaded();
         }
+        /// <summary>
+        /// FrameworkElementのUnloadedイベントに紐づけられる関数
+        /// ウィンドウが閉じられた時には呼ばれない
+        /// </summary>
         public void OnUnloaded()
         {
             _onUnloaded();
 
             SaveData();
+
+            _unloadDisposables.Dispose();
         }
 
+        /// <summary>
+        /// 登録されたセーブデータをセーブする
+        /// </summary>
         public void SaveData()
         {
             foreach (var data in _saveDataSet)
@@ -45,17 +64,15 @@ namespace DailyProject_221204
                 data.Save();
             }
         }
+        /// <summary>
+        /// 登録されたセーブデータをロードする
+        /// </summary>
         public void LoadData()
         {
             foreach (var data in _saveDataSet)
             {
                 data.Load();
             }
-        }
-
-        public void Dispose()
-        {
-            _subscriber.Dispose();
         }
 
         protected virtual void _onLoaded()
@@ -83,30 +100,6 @@ namespace DailyProject_221204
             Debug.WriteLine($"[PropertyName: {propertyName}]OnPropertyChanged");
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
-
-    public class ProcessSubscriber : IDisposable
-    {
-        readonly DisposeComposer _disposeComposer = new();
-
-        public void Subscribe(IDisposable disposable)
-        {
-            _disposeComposer.Add(disposable);
-        }
-        public void Subscribe(IEnumerable<IDisposable> disposables)
-        {
-            _disposeComposer.Add(disposables);
-        }
-        public void Subscribe(Action onDisposeAction)
-        {
-            var actionDisposer = new ActionDisposer(onDisposeAction);
-            _disposeComposer.Add(actionDisposer);
-        }
-
-        public void Dispose()
-        {
-            _disposeComposer.Dispose();
         }
     }
 
