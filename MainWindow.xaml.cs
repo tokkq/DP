@@ -29,32 +29,9 @@ namespace DailyProject_221204
         {
             InitializeComponent();
 
-            var dPMainWindowDataContext = new DPMainWindowDataContext();
-            this.SubscribeWindowDataContext(dPMainWindowDataContext);
-            this.Subscribe(dPMainWindowDataContext.SubscribeSwitchPage(_onSwitchPage));
+            var dPMainWindowDataContext = _instanceDPMainWindowDataContext();
 
-            var taskManagementPageDataContext = new TaskManagementPageDataContext();
-            var taskManagementPage = new TaskManagementPage();
-            taskManagementPage.SubscribePageDataContext(taskManagementPageDataContext);
-            this.SubscribePageDataContext(taskManagementPageDataContext);
-
-            var taskEditorDataContext = new TaskEditorDataContext(taskManagementPageDataContext);
-            var taskEditorPage = new TaskEditorPage();
-            taskEditorPage.SubscribePageDataContext(taskEditorDataContext);
-            this.SubscribePageDataContext(taskEditorDataContext);
-
-            var taskListPageDataContext = new TaskListPageDataContext(taskManagementPageDataContext);
-            var taskListPage = new TaskListPage();
-            taskListPage.SubscribePageDataContext(taskListPageDataContext);
-            this.SubscribePageDataContext(taskListPageDataContext);
-
-            var scheduleListPageDataContext = new ScheduleListPageDataContext(taskManagementPageDataContext);
-            var scheduleListPage = new ScheduleListPage();
-            scheduleListPage.SubscribePageDataContext(scheduleListPageDataContext);
-            this.SubscribePageDataContext(scheduleListPageDataContext);
-
-            taskManagementPage.InitializePage(taskEditorPage, taskListPage, scheduleListPage);
-
+            var taskManagementPage = _instanceTaskManagementPage();
             var todayReflectionPage = new TodayReflectionPage(dPMainWindowDataContext);
             var weekReflectionPage = new WeekReflectionPage(dPMainWindowDataContext);
 
@@ -68,7 +45,44 @@ namespace DailyProject_221204
 
             _dpMainWindowDataContext = dPMainWindowDataContext;
             _mainDisplayPageSwitcher = mainDisplayPageSwitcher;
+        }
 
+        DPMainWindowDataContext _instanceDPMainWindowDataContext()
+        {
+            var dPMainWindowDataContext = new DPMainWindowDataContext();
+            this.SubscribeWindowDataContext(dPMainWindowDataContext);
+            this.Subscribe(dPMainWindowDataContext.SubscribeSwitchPage(_onSwitchPage));
+
+            return dPMainWindowDataContext;
+        }
+
+        TaskManagementPage _instanceTaskManagementPage()
+        {
+            var taskManagementPage = new TaskManagementPage();
+            var taskManagementPageDataContext = new TaskManagementPageDataContext();
+            _subscribePage(taskManagementPage, taskManagementPageDataContext);
+
+            var taskEditorPage = new TaskEditorPage();
+            var taskEditorDataContext = new TaskEditorDataContext(taskManagementPageDataContext);
+            _subscribePage(taskEditorPage, taskEditorDataContext);
+
+            var taskListPage = new TaskListPage();
+            var taskListPageDataContext = new TaskListPageDataContext(taskManagementPageDataContext);
+            _subscribePage(taskListPage, taskListPageDataContext);
+
+            var scheduleListPage = new ScheduleListPage();
+            var scheduleListPageDataContext = new ScheduleListPageDataContext(taskManagementPageDataContext);
+            _subscribePage(scheduleListPage, scheduleListPageDataContext);
+
+            taskManagementPage.InitializePage(taskEditorPage, taskListPage, scheduleListPage);
+
+            return taskManagementPage;
+        }
+
+        void _subscribePage(Page page, AbstractPageDataContext context)
+        {
+            page.SubscribePageDataContext(context);
+            this.SubscribePageDataContext(context);
         }
 
         void _onSwitchPage(PageType pageType)
@@ -87,4 +101,5 @@ namespace DailyProject_221204
 
         }
     }
+
 }
