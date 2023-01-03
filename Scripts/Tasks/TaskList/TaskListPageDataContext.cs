@@ -16,8 +16,6 @@ namespace DailyProject_221204
 
         public StandardCommand AddTaskCommand { get; set; } = null!;
 
-        readonly static string _taskJsonFilePath = Path.Combine(PathDefinition.TaskJsonDirectoryPath, "Tasks.json");
-
         TaskListItems _tasks = new();
         ISaveDataHandler<List<TaskModel>> _taskSaveDataHandler= null!;
 
@@ -40,15 +38,15 @@ namespace DailyProject_221204
                 _tasks.Add(item);
             }
 
-            _subscribe(_tasks);
-            _subscribe(_tasks.SubscribeCollectionChange(() => _notifyUpdateView()));
-            _subscribe(_tasks.SubscribeSelect(vm => context.SelectEventPublisher.Publish(vm.Model)));
-            _subscribe(_tasks.SubscribeAddSchedule(vm => context.AddScheduleEventPublisher.Publish(vm.Model)));
+            _unloadDisposables.Add(_tasks);
+            _unloadDisposables.Add(_tasks.SubscribeCollectionChange(() => _notifyUpdateView()));
+            _unloadDisposables.Add(_tasks.SubscribeSelect(vm => context.SelectEventPublisher.Publish(vm.Model)));
+            _unloadDisposables.Add(_tasks.SubscribeAddSchedule(vm => context.AddScheduleEventPublisher.Publish(vm.Model)));
 
-            context.AddAutoSave(SaveData);
-            _subscribe(context.StatusUpdateEventPublisher.Subscribe(vm => _notifyUpdateView()));
+            context.AddAutoSave(WriteSaveData);
+            _unloadDisposables.Add(context.StatusUpdateEventPublisher.Subscribe(vm => _notifyUpdateView()));
 
-            _taskSaveDataHandler = _registerSaveData<List<TaskModel>>(_taskJsonFilePath);
+            _taskSaveDataHandler = _registerSaveData<List<TaskModel>>(PathDefinition.TaskJsonDirectoryPath, "Tasks");
 
             _addViewProperty(nameof(ActiveTasks));
             _addViewProperty(nameof(WaitTasks));

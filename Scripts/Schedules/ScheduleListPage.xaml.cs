@@ -13,15 +13,9 @@ namespace DailyProject_221204
     /// </summary>
     public partial class ScheduleListPage : Page
     {
-        readonly ScheduleListPageDataContext _scheduleListPageDataContext = null!;
-
-        public ScheduleListPage(TaskManagementPageDataContext taskManagementPageDataContext)
+        public ScheduleListPage()
         {
             InitializeComponent();
-
-            _scheduleListPageDataContext = new(taskManagementPageDataContext);
-
-            this.SetPageDataContext(_scheduleListPageDataContext);
         }
     }
 
@@ -57,10 +51,10 @@ namespace DailyProject_221204
 
             _loadSchedule();
 
-            _subscribe(_schedules);
-            _subscribe(_schedules.SubscribeCollectionChange(_notifyUpdateView));
-            _subscribe(_schedules.SubscribeSelect(taskManagementPageDataContext.SelectEventPublisher.Publish));
-            _subscribe(taskManagementPageDataContext.AddScheduleEventPublisher.Subscribe(_addSchedule));
+            _unloadDisposables.Add(_schedules);
+            _unloadDisposables.Add(_schedules.SubscribeCollectionChange(_notifyUpdateView));
+            _unloadDisposables.Add(_schedules.SubscribeSelect(taskManagementPageDataContext.SelectEventPublisher.Publish));
+            _unloadDisposables.Add(taskManagementPageDataContext.AddScheduleEventPublisher.Subscribe(_addSchedule));
 
             _addViewProperty(nameof(DisplayDay));
             _addViewProperty(nameof(DisplaySchedules));

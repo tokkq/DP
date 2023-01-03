@@ -43,16 +43,57 @@ namespace DailyProject_221204
         }
 
         /// <summary>
-        /// DataContextをセットし、UnloadedタイミングでDisposeするようにバインドする。
+        /// PageDataContextをFrameworkElementに購読させる。
         /// </summary>
-        public static void SetPageDataContext<TPageDataContextType>(this Page page, TPageDataContextType pageDataContext)
-            where TPageDataContextType : AbstractPageDataContext
+        public static void SubscribeFrameworkElementDataContext<TFrameworkElementDataContext>(this FrameworkElement element, TFrameworkElementDataContext pageDataContext)
+            where TFrameworkElementDataContext : AbstractFrameworkElementDataContext
         {
-            page.DataContext = pageDataContext;
-            page.Subscribe(pageDataContext);
+            element.DataContext = pageDataContext;
 
-            page.SubscribeOnLoaded(pageDataContext.OnLoaded);
-            page.SubscribeOnUnloaded(pageDataContext.OnUnloaded);
+            element.SubscribeOnLoaded(pageDataContext.OnLoaded);
+            element.SubscribeOnUnloaded(pageDataContext.OnUnloaded);
+        }
+
+        /// <summary>
+        /// PageDataContextをPageに購読させる。
+        /// </summary>
+        public static void SubscribePageDataContext<TPageDataContext>(this Page page, TPageDataContext pageDataContext)
+            where TPageDataContext : AbstractPageDataContext
+        {
+            page.SubscribeFrameworkElementDataContext(pageDataContext);
+        }
+
+
+        /// <summary>
+        /// Closed時イベントに処理を購読させる。購読されたイベントは発火後に非購読となる。
+        /// </summary>
+        public static void SubscribeOnClosed(this Window window, Action action)
+        {
+            window.Closed += __onClosed;
+            void __onClosed(object? sender, EventArgs e)
+            {
+                DPDebug.WriteLine($"[Closed]window.Name: {window.Name}");
+                action();
+                window.Closed -= __onClosed;
+            }
+        }
+        /// <summary>
+        /// WindowDataContextをWindowに購読させる。
+        /// </summary>
+        public static void SubscribeWindowDataContext<TWindowDataContext>(this Window window, TWindowDataContext windowDataContext)
+            where TWindowDataContext : AbstractWindowDataContext
+        {
+            window.SubscribeFrameworkElementDataContext(windowDataContext);
+            window.SubscribeOnClosed(windowDataContext.OnClosed);
+        }
+        /// <summary>
+        /// PageDataContextをWindowに購読させる。
+        /// </summary>
+        public static void SubscribePageDataContext<TPageDataContext>(this Window window, TPageDataContext pageDataContext)
+            where TPageDataContext : AbstractPageDataContext
+        {
+            // Closedイベントがページ側に存在しないため、OnUnloadedイベントをWindowのClosedに購読させる。
+            window.SubscribeOnClosed(pageDataContext.OnUnloaded);
         }
     }
 }

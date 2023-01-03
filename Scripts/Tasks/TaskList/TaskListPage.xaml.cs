@@ -11,14 +11,9 @@ namespace DailyProject_221204
     /// </summary>
     public partial class TaskListPage : Page
     {
-        TaskListPageDataContext _taskListPageDataContext = null!;
-
-        public TaskListPage(TaskManagementPageDataContext context)
+        public TaskListPage()
         {
             InitializeComponent();
-
-            _taskListPageDataContext = new TaskListPageDataContext(context);
-            this.SetPageDataContext(_taskListPageDataContext);
         }
     }
 }

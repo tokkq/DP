@@ -21,27 +21,21 @@ namespace DailyProject_221204
     /// </summary>
     public partial class TaskManagementPage : Page
     {
-        TaskEditorPage _taskEditorPage = null!;
-        TaskListPage _taskListPage = null!;
-        ScheduleListPage _scheduleListPage = null!;
-
-        public TaskManagementPage(DPMainWindowDataContext dpMainWindowDataContext)
+        public TaskManagementPage()
         {
             InitializeComponent();
+        }
 
-            var context = new TaskManagementPageDataContext();
-            this.Subscribe(context);
-
-            _taskEditorPage = new TaskEditorPage(context);
-            _taskListPage = new TaskListPage(context);
-            _scheduleListPage = new ScheduleListPage(context);
+        public void InitializePage(TaskEditorPage taskEditorPage, TaskListPage taskListPage, ScheduleListPage scheduleListPage)
+        {
+            _editFrame.Navigate(taskEditorPage);
+            _taskListFrame.Navigate(taskListPage);
+            _scheduleFrame.Navigate(scheduleListPage);
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            _editFrame.Navigate(_taskEditorPage);
-            _taskListFrame.Navigate(_taskListPage);
-            _scheduleFrame.Navigate(_scheduleListPage);
+            
         }
 
         private void Page_Unloaded(object sender, RoutedEventArgs e)

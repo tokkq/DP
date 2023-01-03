@@ -29,26 +29,46 @@ namespace DailyProject_221204
         {
             InitializeComponent();
 
-            _dpMainWindowDataContext = new DPMainWindowDataContext();
-            
-            _mainDisplayPageSwitcher = _instanceMainDisplayPageSwitcher();
+            var dPMainWindowDataContext = new DPMainWindowDataContext();
+            this.SubscribeWindowDataContext(dPMainWindowDataContext);
+            this.Subscribe(dPMainWindowDataContext.SubscribeSwitchPage(_onSwitchPage));
 
-            this.Subscribe(_dpMainWindowDataContext.SubscribeSwitchPage(_onSwitchPage));
-        }
+            var taskManagementPageDataContext = new TaskManagementPageDataContext();
+            var taskManagementPage = new TaskManagementPage();
+            taskManagementPage.SubscribePageDataContext(taskManagementPageDataContext);
+            this.SubscribePageDataContext(taskManagementPageDataContext);
 
-        PageSwitcher _instanceMainDisplayPageSwitcher()
-        {
-            var taskManagementPage = new TaskManagementPage(_dpMainWindowDataContext);
-            var todayReflectionPage = new TodayReflectionPage(_dpMainWindowDataContext);
-            var weekReflectionPage = new WeekReflectionPage(_dpMainWindowDataContext);
+            var taskEditorDataContext = new TaskEditorDataContext(taskManagementPageDataContext);
+            var taskEditorPage = new TaskEditorPage();
+            taskEditorPage.SubscribePageDataContext(taskEditorDataContext);
+            this.SubscribePageDataContext(taskEditorDataContext);
+
+            var taskListPageDataContext = new TaskListPageDataContext(taskManagementPageDataContext);
+            var taskListPage = new TaskListPage();
+            taskListPage.SubscribePageDataContext(taskListPageDataContext);
+            this.SubscribePageDataContext(taskListPageDataContext);
+
+            var scheduleListPageDataContext = new ScheduleListPageDataContext(taskManagementPageDataContext);
+            var scheduleListPage = new ScheduleListPage();
+            scheduleListPage.SubscribePageDataContext(scheduleListPageDataContext);
+            this.SubscribePageDataContext(scheduleListPageDataContext);
+
+            taskManagementPage.InitializePage(taskEditorPage, taskListPage, scheduleListPage);
+
+            var todayReflectionPage = new TodayReflectionPage(dPMainWindowDataContext);
+            var weekReflectionPage = new WeekReflectionPage(dPMainWindowDataContext);
+
             var pageTypeToPage = new Dictionary<int, Page>()
             {
                 { (int)PageType.TaskManagement, taskManagementPage },
                 { (int)PageType.WeekReflection, todayReflectionPage },
                 { (int)PageType.TodayReflection, weekReflectionPage },
             };
+            var mainDisplayPageSwitcher = new PageSwitcher(_mainFrame, pageTypeToPage);
 
-            return new PageSwitcher(_mainFrame, pageTypeToPage);
+            _dpMainWindowDataContext = dPMainWindowDataContext;
+            _mainDisplayPageSwitcher = mainDisplayPageSwitcher;
+
         }
 
         void _onSwitchPage(PageType pageType)

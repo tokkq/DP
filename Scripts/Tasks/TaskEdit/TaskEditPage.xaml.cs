@@ -21,21 +21,9 @@ namespace DailyProject_221204
     /// </summary>
     public partial class TaskEditorPage : Page
     {
-        public TaskEditViewModel Task { get; } = new TaskEditViewModel(new TaskModel());
-
-        public TaskEditorPage(TaskManagementPageDataContext context)
+        public TaskEditorPage()
         {
             InitializeComponent();
-
-            DataContext = this;
-
-            this.Subscribe(context.SelectEventPublisher.Subscribe(_onTaskSelect));
-            this.Subscribe(Task.ChangeStatusCommand.Subscribe(() => context.StatusUpdateEventPublisher.Publish(Task.Model)));
-        }
-
-        void _onTaskSelect(TaskModel model)
-        {
-            Task.SetModel(model);
         }
     }
 }

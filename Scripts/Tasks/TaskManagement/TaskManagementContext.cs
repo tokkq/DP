@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DailyProject_221204.Scripts;
+using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
@@ -20,7 +21,7 @@ namespace DailyProject_221204
         {
             _autoSaveTimer.Interval = TimeSpan.FromSeconds(AUTO_SAVE_INTERVAL_SECOND);
             _autoSaveTimer.Start();
-            _subscribe(_autoSaveTimer.Stop);
+            _unloadDisposables.Add(new ActionDisposer(_autoSaveTimer.Stop));    
         }
 
         public void AddAutoSave(Action saveProcess)
