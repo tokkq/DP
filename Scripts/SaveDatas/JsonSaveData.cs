@@ -8,6 +8,9 @@ namespace DailyProject_221204
         T _saveData = null!;
         string _saveDataFilePath = string.Empty;
 
+        SaveReadResult _lastReadResult = SaveReadResult.Success;
+        SaveWriteResult _lastWriteResult = SaveWriteResult.Success;
+
         public JsonSaveData(string saveDataFilePath)
         {
             _saveDataFilePath = saveDataFilePath;
@@ -30,10 +33,20 @@ namespace DailyProject_221204
         public void Write()
         {
             JsonUtility.SaveJson(_saveData, _saveDataFilePath);
+            _lastWriteResult = SaveWriteResult.Success;
         }
         public void Read()
         {
-            _saveData = JsonUtility.LoadJson<T>(_saveDataFilePath, shouldCreateNewFileIfNoExistJson: true);
+            if (File.Exists(_saveDataFilePath) == true)
+            {
+                _saveData = JsonUtility.LoadJson<T>(_saveDataFilePath);
+                _lastReadResult = SaveReadResult.Success;
+            }
+            else
+            {
+                _saveData = new T();
+                _lastReadResult = SaveReadResult.NoExistFile;
+            }
         }
 
         public void SetPath(string path)
@@ -48,5 +61,40 @@ namespace DailyProject_221204
         {
             return _saveData;
         }
+        public SaveReadResult GetReadResult()
+        {
+            return _lastReadResult;
+        }
+        public SaveWriteResult GetWriteResult()
+        {
+            return _lastWriteResult;
+        }
+    }
+
+    public enum SaveReadResult
+    {
+        /// <summary>
+        /// 処理がされていない。
+        /// </summary>
+        None,
+        /// <summary>
+        /// 成功。
+        /// </summary>
+        Success,
+        /// <summary>
+        /// ファイルが存在せず失敗。
+        /// </summary>
+        NoExistFile,
+    }
+    public enum SaveWriteResult
+    {
+        /// <summary>
+        /// 処理がされていない。
+        /// </summary>
+        None,
+        /// <summary>
+        /// 成功。
+        /// </summary>
+        Success,
     }
 }

@@ -29,21 +29,24 @@ namespace DailyProject_221204
         {
             InitializeComponent();
 
-            var dPMainWindowDataContext = _instanceDPMainWindowDataContext();
+            var dpMainWindowDataContext = _instanceDPMainWindowDataContext();
 
             var taskManagementPage = _instanceTaskManagementPage();
-            var todayReflectionPage = new TodayReflectionPage(dPMainWindowDataContext);
-            var weekReflectionPage = new WeekReflectionPage(dPMainWindowDataContext);
+            var todayReflectionPage = new TodayReflectionPage(dpMainWindowDataContext);
+
+            var weekReflectionPage = new WeekReflectionPage();
+            var weekReflectionDataContext = new WeekReflectionPageDataContext(dpMainWindowDataContext);
+            _subscribePage(weekReflectionPage, weekReflectionDataContext);
 
             var pageTypeToPage = new Dictionary<int, Page>()
             {
                 { (int)PageType.TaskManagement, taskManagementPage },
-                { (int)PageType.WeekReflection, todayReflectionPage },
-                { (int)PageType.TodayReflection, weekReflectionPage },
+                { (int)PageType.WeekReflection, weekReflectionPage },
+                { (int)PageType.TodayReflection, todayReflectionPage },
             };
             var mainDisplayPageSwitcher = new PageSwitcher(_mainFrame, pageTypeToPage);
 
-            _dpMainWindowDataContext = dPMainWindowDataContext;
+            _dpMainWindowDataContext = dpMainWindowDataContext;
             _mainDisplayPageSwitcher = mainDisplayPageSwitcher;
         }
 

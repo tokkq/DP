@@ -51,11 +51,16 @@ namespace DailyProject_221204
         public static T LoadJson<T>(string path, bool shouldCreateNewFileIfNoExistJson = false)
             where T : class, new()
         {
-            var existJsonFile = File.Exists(path) == true;
-            var shouldCreateNewFile = existJsonFile == false && shouldCreateNewFileIfNoExistJson == true;
-            if (shouldCreateNewFile == true)
+            if (File.Exists(path) == false)
             {
-                SaveJson(new T(), path);
+                if (shouldCreateNewFileIfNoExistJson == true)
+                {
+                    SaveJson(new T(), path);
+                }
+                else
+                {
+                    throw new FileNotFoundException($"[path: {path}][shouldCreateNewFileIfNoExistJson: {shouldCreateNewFileIfNoExistJson}]Jsonファイルが存在しません。");
+                }
             }
 
             var options = new JsonSerializerOptions()

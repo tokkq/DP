@@ -19,9 +19,10 @@
 
                 <Grid.ColumnDefinitions>
 
-                    <ColumnDefinition Width="30" />
+                    <ColumnDefinition Width="10" />
+                    <ColumnDefinition Width="3*" />
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="30" />
+                    <ColumnDefinition Width="10" />
 
                 </Grid.ColumnDefinitions>
 
@@ -34,7 +35,7 @@
 
                 <Label
                     Grid.Column="1"
-                    HorizontalAlignment="Center"
+                    HorizontalAlignment="Left"
                     Content="0001/01/01"
                     FontSize="24"
                     FontWeight="Bold"
@@ -43,8 +44,16 @@
 
                 </Label>
 
-                <Separator
+                <Button
                     Grid.Column="2"
+                    Command="{Binding SwitchPageToTodayReflectionPage}"
+                    Content="本日の振り返り"
+                    >
+
+                </Button>
+
+                <Separator
+                    Grid.Column="3"
                     Opacity="0"
                     >
 
@@ -79,7 +88,7 @@
                         Padding="2"
                         Background="Black"
                         Foreground="White"
-                        Text="{Binding Reflection.Model.GoodPointText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Text="{Binding LastWeekReflection.Model.TargetText}"
                         >
 
                     </TextBlock>
@@ -208,7 +217,7 @@
 
             <Button
                 Height="32"
-                Command="{Binding SwitchPageToNextCommand}"
+                Command="{Binding SwitchPageToTaskManagement}"
                 Content="完了"
                 >
 
