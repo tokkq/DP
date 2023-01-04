@@ -32,7 +32,10 @@ namespace DailyProject_221204
             var dpMainWindowDataContext = _instanceDPMainWindowDataContext();
 
             var taskManagementPage = _instanceTaskManagementPage();
-            var todayReflectionPage = new TodayReflectionPage(dpMainWindowDataContext);
+
+            var todayReflectionPage = new TodayReflectionPage();
+            var todayReflectionDataContext = new TodayReflectionPageDataContext(dpMainWindowDataContext);
+            _subscribePage(todayReflectionPage, todayReflectionDataContext);
 
             var weekReflectionPage = new WeekReflectionPage();
             var weekReflectionDataContext = new WeekReflectionPageDataContext(dpMainWindowDataContext);

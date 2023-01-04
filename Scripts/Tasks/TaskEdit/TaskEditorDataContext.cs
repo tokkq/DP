@@ -4,8 +4,8 @@
     {
         public TaskEditorDataContext(TaskManagementPageDataContext context)
         {
-            _unloadDisposables.Add(context.SelectEventPublisher.Subscribe(_onTaskSelect));
-            _unloadDisposables.Add(Task.ChangeStatusCommand.Subscribe(() => context.StatusUpdateEventPublisher.Publish(Task.Model)));
+            _addUnloadDispose(context.SelectEventPublisher.Subscribe(_onTaskSelect));
+            _addUnloadDispose(Task.ChangeStatusCommand.Subscribe(() => context.StatusUpdateEventPublisher.Publish(Task.Model)));
         }
 
         public TaskEditViewModel Task { get; } = new TaskEditViewModel(new TaskModel());

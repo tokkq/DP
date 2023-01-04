@@ -37,7 +37,7 @@
                 <Label
                     Grid.Column="1"
                     HorizontalAlignment="Left"
-                    Content="0001/01/01"
+                    Content=""
                     FontSize="24"
                     FontWeight="Bold"
                     Foreground="White"
@@ -47,6 +47,7 @@
 
                 <Button
                     Grid.Column="2"
+                    Command="{Binding SwitchPageToWeekReflectionPageCommand}"
                     Content="今週の振り返り"
                     >
 
@@ -332,7 +333,7 @@
 
             <Button
                 Height="32"
-                Command="{Binding SwitchPageToNextCommand}"
+                Command="{Binding SwitchPageToTaskManagementPageCommand}"
                 Content="完了"
                 >
 

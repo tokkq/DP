@@ -21,12 +21,13 @@ namespace DailyProject_221204
         {
             _autoSaveTimer.Interval = TimeSpan.FromSeconds(AUTO_SAVE_INTERVAL_SECOND);
             _autoSaveTimer.Start();
-            _unloadDisposables.Add(new ActionDisposer(_autoSaveTimer.Stop));    
+            _addUnloadDispose(new ActionDisposer(_autoSaveTimer.Stop));    
         }
 
-        public void AddAutoSave(Action saveProcess)
+        public IDisposable SubscribeAutoSave(Action saveProcess)
         {
             _autoSaveTimer.Tick += (a, b) => saveProcess();
+            return new ActionDisposer(() => _autoSaveTimer.Tick -= (a, b) => saveProcess());
         }
     }
 }

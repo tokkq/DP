@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -6,6 +7,10 @@ using System.Runtime.CompilerServices;
 
 namespace DailyProject_221204
 {
+    /// <summary>
+    /// UIElement.DataContextに指定するクラスの抽象クラス。
+    /// ViewModel（XAML）からViewModelクラスやModelにアクセスさせるための橋渡しも担うため、役割はViewModel。
+    /// </summary>
     public class AbstractFrameworkElementDataContext : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -14,12 +19,8 @@ namespace DailyProject_221204
         /// XAMLからViewを更新させる用のコマンド
         /// </summary>
         public EventCommand UpdateViewCommand = new();
-
-        /// <summary>
-        /// Unload時に破棄されるDisposables
-        /// </summary>
-        readonly protected DisposeComposer _unloadDisposables = new();
-
+        
+        readonly DisposeComposer _unloadDisposables = new();
         readonly HashSet<string> _viewProperties = new();
         readonly HashSet<ISaveData> _saveDataSet = new();
 
@@ -36,10 +37,11 @@ namespace DailyProject_221204
             ReadSaveData();
 
             _onLoaded();
+
+            _notifyUpdateView();
         }
         /// <summary>
         /// FrameworkElementのUnloadedイベントに紐づけられる関数
-        /// ウィンドウが閉じられた時には呼ばれない
         /// </summary>
         public void OnUnloaded()
         {
@@ -94,11 +96,23 @@ namespace DailyProject_221204
             return saveData;
         }
 
+        /// <summary>
+        /// Unload時に破棄されるDisposablesを追加。
+        /// </summary>
+        protected void _addUnloadDispose(IDisposable disposable)
+        {
+            _unloadDisposables.Add(disposable);
+        }
+        /// <summary>
+        /// _notifyUpdateView()で更新通知が発行されるプロパティを追加。
+        /// </summary>
         protected void _addViewProperty(string propertyName)
         {
             _viewProperties.Add(propertyName);
         }
-
+        /// <summary>
+        /// XAMLに対して更新通知を行う。
+        /// </summary>
         protected void _notifyUpdateView()
         {
             foreach (var property in _viewProperties)

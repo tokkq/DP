@@ -14,7 +14,7 @@ namespace DailyProject_221204
         }
         public PageType GetInitialPageType()
         {
-            return PageType.WeekReflection;
+            return PageType.TodayReflection;
         }
     }
 }

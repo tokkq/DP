@@ -27,6 +27,30 @@
 
         </Style>
 
+        <Style TargetType="{x:Type TextBox}">
+
+            <Setter Property="Foreground" Value="White">
+
+            </Setter>
+
+            <Setter Property="Background" Value="Black">
+
+            </Setter>
+
+            <Setter Property="Height" Value="64">
+
+            </Setter>
+
+            <Setter Property="Padding" Value="2">
+
+            </Setter>
+
+            <Setter Property="AcceptsReturn" Value="True">
+
+            </Setter>
+
+        </Style>
+
         <local:DivideConverter x:Key="DivideConverter" />
 
     </Application.Resources>

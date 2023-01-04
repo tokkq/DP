@@ -21,11 +21,11 @@ namespace DailyProject_221204
         {
             _dPMainWindowDataContext = dpMainWindowDataContext;
 
-            var reflectionModel = new WeekReflectionModel();
-            var reflectionViewModel = new WeekReflectionViewModel(reflectionModel);
-
             SwitchPageToTaskManagement = new StandardCommand(a => _dPMainWindowDataContext.SwitchPage(PageType.TaskManagement));
             SwitchPageToTodayReflectionPage = new StandardCommand(a => _dPMainWindowDataContext.SwitchPage(PageType.TodayReflection));
+
+            _addViewProperty(nameof(LastWeekReflection));
+            _addViewProperty(nameof(ThisWeekReflection));
         }
 
         protected override void _onLoaded()

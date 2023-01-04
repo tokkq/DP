@@ -28,10 +28,14 @@ namespace DailyProject_221204
 
         public ScheduleListItemViewModel(ScheduleModel model) : base(model)
         {
-            MoveEventCommand = new StandardCommand<int>(__move);
-            void __move(int param)
+            MoveEventCommand = new StandardCommand(__move);
+            void __move(object? param)
             {
-                if(int.TryParse(param.ToString(), out var offsetSeconds))
+                if (param == null)
+                {
+                    return;
+                }
+                if (int.TryParse(param.ToString(), out var offsetSeconds))
                 {
                     var startAt = model.StartAt.AddSeconds(offsetSeconds);
                     var endAt = model.EndAt.AddSeconds(offsetSeconds);
@@ -40,9 +44,13 @@ namespace DailyProject_221204
                 }
             }
 
-            ChangeItemPeriodCommand = new StandardCommand<int>(__changeItemPeriod);
-            void __changeItemPeriod(int param)
+            ChangeItemPeriodCommand = new StandardCommand(__changeItemPeriod);
+            void __changeItemPeriod(object? param)
             {
+                if (param == null)
+                {
+                    return;
+                }
                 if (int.TryParse(param.ToString(), out var addSeconds))
                 {
                     var startAt = model.StartAt;

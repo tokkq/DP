@@ -10,8 +10,6 @@ namespace DailyProject_221204
         const int SCHEDULE_START_AT = 9;
         const int SCHEDULE_END_AT = 18;
 
-        readonly static string _scheduleJsonFilePath = Path.Combine(PathDefinition.SchedulesJsonDirectoryPath, "Schedule.json");
-
         public DateTime DisplayDay 
         {
             get
@@ -30,36 +28,50 @@ namespace DailyProject_221204
 
         ScheduleListItems _schedules { get; } = new();
         DateTime _displayDay = DateTime.Today;
+        TaskManagementPageDataContext _taskManagementPageDataContext = null!;
+        ISaveDataHandler<List<ScheduleModel>> _saveDataHandler = null!;
 
         public ScheduleListPageDataContext(TaskManagementPageDataContext taskManagementPageDataContext)
         {
-            taskManagementPageDataContext.AddAutoSave(_saveSchedule);
-
-            _loadSchedule();
-
-            _unloadDisposables.Add(_schedules);
-            _unloadDisposables.Add(_schedules.SubscribeCollectionChange(_notifyUpdateView));
-            _unloadDisposables.Add(_schedules.SubscribeSelect(taskManagementPageDataContext.SelectEventPublisher.Publish));
-            _unloadDisposables.Add(taskManagementPageDataContext.AddScheduleEventPublisher.Subscribe(_addSchedule));
-
             _addViewProperty(nameof(DisplayDay));
             _addViewProperty(nameof(DisplaySchedules));
 
+            _saveDataHandler = _registerSaveData<List<ScheduleModel>>(PathDefinition.SchedulesJsonDirectoryPath, "Schedule");
+            var aaa = _registerSaveData<List<ScheduleModel>>(PathDefinition.SchedulesJsonDirectoryPath, "sss");
+
+            _taskManagementPageDataContext = taskManagementPageDataContext;
+        }
+
+        protected override void _onLoaded()
+        {
+            base._onLoaded();
+
+            _loadSchedule();
+
+            _addUnloadDispose(_schedules);
+            _addUnloadDispose(_schedules.SubscribeCollectionChange(_notifyUpdateView));
+            _addUnloadDispose(_schedules.SubscribeSelect(_taskManagementPageDataContext.SelectEventPublisher.Publish));
+            _addUnloadDispose(_taskManagementPageDataContext.AddScheduleEventPublisher.Subscribe(_addSchedule));
+
             _updateScheduleDay(_displayDay);
-            _notifyUpdateView();
+        }
+
+        protected override void _onUnloaded()
+        {
+            base._onUnloaded();
+
+            _saveSchedule();
         }
 
         void _saveSchedule()
         {
             var taskModels = _schedules.Select(vm => vm.Model).ToList();
-            JsonUtility.SaveJson(taskModels, _scheduleJsonFilePath);
+            _saveDataHandler.SetValue(taskModels);
         }
         void _loadSchedule()
         {
-            var models = JsonUtility.LoadJson<List<ScheduleModel>>(_scheduleJsonFilePath, shouldCreateNewFileIfNoExistJson: true);
-
             _schedules.Clear();
-            foreach (var model in models)
+            foreach (var model in _saveDataHandler.GetValue())
             {
                 var viewModel = new ScheduleListItemViewModel(model);
                 _schedules.Add(viewModel);
