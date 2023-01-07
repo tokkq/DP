@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace DailyProject_221204
 {
-    public class ScheduleListPageDataContext : AbstractPageDataContext
+    public class ScheduleListPageDataContext : AbstractTaskManagementPageDataContext
     {
         const int SCHEDULE_START_AT = 9;
         const int SCHEDULE_END_AT = 18;
@@ -28,18 +28,17 @@ namespace DailyProject_221204
 
         ScheduleListItems _schedules { get; } = new();
         DateTime _displayDay = DateTime.Today;
-        TaskManagementPageDataContext _taskManagementPageDataContext = null!;
+        TaskManagementContext _taskManagementContext = null!;
         ISaveDataHandler<List<ScheduleModel>> _saveDataHandler = null!;
 
-        public ScheduleListPageDataContext(TaskManagementPageDataContext taskManagementPageDataContext)
+        public ScheduleListPageDataContext(TaskManagementContext taskManagementContext) : base(taskManagementContext)
         {
             _addViewProperty(nameof(DisplayDay));
             _addViewProperty(nameof(DisplaySchedules));
 
             _saveDataHandler = _registerSaveData<List<ScheduleModel>>(PathDefinition.SchedulesJsonDirectoryPath, "Schedule");
-            var aaa = _registerSaveData<List<ScheduleModel>>(PathDefinition.SchedulesJsonDirectoryPath, "sss");
 
-            _taskManagementPageDataContext = taskManagementPageDataContext;
+            _taskManagementContext = taskManagementContext;
         }
 
         protected override void _onLoaded()
@@ -50,8 +49,8 @@ namespace DailyProject_221204
 
             _addUnloadDispose(_schedules);
             _addUnloadDispose(_schedules.SubscribeCollectionChange(_notifyUpdateView));
-            _addUnloadDispose(_schedules.SubscribeSelect(_taskManagementPageDataContext.SelectEventPublisher.Publish));
-            _addUnloadDispose(_taskManagementPageDataContext.AddScheduleEventPublisher.Subscribe(_addSchedule));
+            _addUnloadDispose(_schedules.SubscribeSelect(_taskManagementContext.SelectEventPublisher.Publish));
+            _addUnloadDispose(_taskManagementContext.AddScheduleEventPublisher.Subscribe(_addSchedule));
 
             _updateScheduleDay(_displayDay);
         }

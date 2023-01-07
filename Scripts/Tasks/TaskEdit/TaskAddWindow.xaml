@@ -7,19 +7,34 @@
     Title="TaskAddWindow"
     Width="450"
     Height="800"
+    Closing="Window_Closing"
+    Style="{DynamicResource StandardWindowStyle}"
     mc:Ignorable="d"
     >
 
-    <DockPanel>
+    <StackPanel Margin="8">
+
+        <Button
+            Height="32"
+            Content="Taskを追加"
+            >
+
+        </Button>
+
+        <Separator
+            Height="4"
+            Opacity="0"
+            >
+
+        </Separator>
 
         <Frame
             x:Name="_taskEditFrame"
             NavigationUIVisibility="Hidden"
             >
 
-
         </Frame>
 
-    </DockPanel>
+    </StackPanel>
 
 </Window>

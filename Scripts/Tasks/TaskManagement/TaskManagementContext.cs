@@ -7,21 +7,32 @@ using System.Windows.Threading;
 
 namespace DailyProject_221204
 {
-    public class TaskManagementPageDataContext : AbstractPageDataContext
+
+    public class TaskManagementContext : IDisposable
     {
         const int AUTO_SAVE_INTERVAL_SECOND = 3;
 
         readonly DispatcherTimer _autoSaveTimer = new DispatcherTimer();
 
+        public DPContext DPContext { get; } = null!;
+
         public EventPublisher<TaskModel> SelectEventPublisher = new();
         public EventPublisher<TaskModel> StatusUpdateEventPublisher = new();
         public EventPublisher<TaskModel> AddScheduleEventPublisher = new();
+        public EventPublisher<TaskModel> AddTaskEventPublisher = new();
+        public EventPublisher OpenAddTaskWindowEventPublisher = new();
 
-        public TaskManagementPageDataContext()
+        public TaskManagementContext(DPContext dpContext)
         {
             _autoSaveTimer.Interval = TimeSpan.FromSeconds(AUTO_SAVE_INTERVAL_SECOND);
             _autoSaveTimer.Start();
-            _addUnloadDispose(new ActionDisposer(_autoSaveTimer.Stop));    
+
+            DPContext = dpContext;
+        }
+
+        public void Dispose()
+        {
+            _autoSaveTimer.Stop();
         }
 
         public IDisposable SubscribeAutoSave(Action saveProcess)

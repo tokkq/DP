@@ -1,11 +1,11 @@
 ﻿namespace DailyProject_221204
 {
-    public class TaskEditorDataContext : AbstractPageDataContext
+    public class TaskEditorPageDataContext : AbstractTaskManagementPageDataContext
     {
-        public TaskEditorDataContext(TaskManagementPageDataContext context)
+        public TaskEditorPageDataContext(TaskManagementContext taskManagementContext) : base(taskManagementContext)
         {
-            _addUnloadDispose(context.SelectEventPublisher.Subscribe(_onTaskSelect));
-            _addUnloadDispose(Task.ChangeStatusCommand.Subscribe(() => context.StatusUpdateEventPublisher.Publish(Task.Model)));
+            _addUnloadDispose(taskManagementContext.SelectEventPublisher.Subscribe(_onTaskSelect));
+            _addUnloadDispose(Task.ChangeStatusCommand.Subscribe(() => taskManagementContext.StatusUpdateEventPublisher.Publish(Task.Model)));
         }
 
         public TaskEditViewModel Task { get; } = new TaskEditViewModel(new TaskModel());

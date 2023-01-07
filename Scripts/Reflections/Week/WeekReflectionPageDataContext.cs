@@ -9,7 +9,7 @@ namespace DailyProject_221204
         ISaveDataHandler<WeekReflectionModel> _lastWeekSaveDataHandler = null!;
         ISaveDataHandler<WeekReflectionModel> _thisWeekSaveDataHandler = null!;
 
-        readonly DPMainWindowDataContext _dPMainWindowDataContext = null!;
+        readonly DPContext _dpContext = null!;
 
         public WeekReflectionViewModel LastWeekReflection { get; private set; } = null!;
         public WeekReflectionViewModel ThisWeekReflection { get; private set; } = null!;
@@ -17,28 +17,27 @@ namespace DailyProject_221204
         public StandardCommand SwitchPageToTaskManagement { get; } = null!;
         public StandardCommand SwitchPageToTodayReflectionPage { get; } = null!;
 
-        public WeekReflectionPageDataContext(DPMainWindowDataContext dpMainWindowDataContext)
+        public WeekReflectionPageDataContext(DPContext dpContext)
         {
-            _dPMainWindowDataContext = dpMainWindowDataContext;
+            _dpContext = dpContext;
 
-            SwitchPageToTaskManagement = new StandardCommand(a => _dPMainWindowDataContext.SwitchPage(PageType.TaskManagement));
-            SwitchPageToTodayReflectionPage = new StandardCommand(a => _dPMainWindowDataContext.SwitchPage(PageType.TodayReflection));
+            SwitchPageToTaskManagement = new StandardCommand(a => _dpContext.SwitchPage(PageType.TaskManagement));
+            SwitchPageToTodayReflectionPage = new StandardCommand(a => _dpContext.SwitchPage(PageType.TodayReflection));
 
             _addViewProperty(nameof(LastWeekReflection));
             _addViewProperty(nameof(ThisWeekReflection));
+
+            var lastWeekSaveFileName = _getWeekJsonFileName(DateTime.Today.AddDays(-7));
+            _lastWeekSaveDataHandler = _registerSaveData<WeekReflectionModel>(PathDefinition.WeekReflectionsJsonDirectoryPath, lastWeekSaveFileName);
+            var thisWeekSaveFileName = _getWeekJsonFileName(DateTime.Today);
+            _thisWeekSaveDataHandler = _registerSaveData<WeekReflectionModel>(PathDefinition.WeekReflectionsJsonDirectoryPath, thisWeekSaveFileName);
         }
 
         protected override void _onLoaded()
         {
             base._onLoaded();
 
-            var lastWeekSaveFileName = _getWeekJsonFileName(DateTime.Today.AddDays(-7));
-            _lastWeekSaveDataHandler = _registerSaveData<WeekReflectionModel>(PathDefinition.WeekReflectionsJsonDirectoryPath, lastWeekSaveFileName);
-
             LastWeekReflection = _instanceWeekReflectionViewModel(_lastWeekSaveDataHandler.GetValue());
-
-            var thisWeekSaveFileName = _getWeekJsonFileName(DateTime.Today);
-            _thisWeekSaveDataHandler = _registerSaveData<WeekReflectionModel>(PathDefinition.WeekReflectionsJsonDirectoryPath, thisWeekSaveFileName);
 
             var thisWeekModel = new WeekReflectionModel()
             {

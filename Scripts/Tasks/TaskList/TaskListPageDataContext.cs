@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DailyProject_221204
 {
-    public class TaskListPageDataContext : AbstractPageDataContext
+    public class TaskListPageDataContext : AbstractTaskManagementPageDataContext
     {
         public IEnumerable<TaskListItemViewModel> ActiveTasks => _tasks.Where(vm => vm.Model.Status.StatusType == TaskStatusType.Active);
         public IEnumerable<TaskListItemViewModel> WaitTasks => _tasks.Where(vm => vm.Model.Status.StatusType == TaskStatusType.Wait);
@@ -18,34 +18,21 @@ namespace DailyProject_221204
 
         TaskListItems _tasks = new();
         ISaveDataHandler<List<TaskModel>> _taskSaveDataHandler= null!;
-        TaskManagementPageDataContext _taskManagementPageDataContext = null!;
 
-        public TaskListPageDataContext(TaskManagementPageDataContext context)
+        public TaskListPageDataContext(TaskManagementContext taskManagementContext) : base(taskManagementContext)
         {
-            AddTaskCommand = new StandardCommand(__addNewTask);
-            void __addNewTask(object? param)
+            AddTaskCommand = new StandardCommand(__openAddTaskWindow);
+            void __openAddTaskWindow(object? param)
             {
-                var item = new TaskListItemViewModel(new TaskModel()
-                {
-                    Name = "NewTask",
-                    Description = "",
-                    StartAt = DateTime.Now,
-                    CreateAt = DateTime.Now,
-                    UpdateAt = DateTime.Now,
-                });
-
-                DPDebug.WriteLine($"[Name: {item.Model.Name}]AddNewTask");
-
-                _tasks.Add(item);
+                _taskManagementContext.OpenAddTaskWindowEventPublisher.Publish();
             }
-            
+
             _addViewProperty(nameof(ActiveTasks));
             _addViewProperty(nameof(WaitTasks));
             _addViewProperty(nameof(IdeaTasks));
             _addViewProperty(nameof(CompleteTasks));
 
             _taskSaveDataHandler = _registerSaveData<List<TaskModel>>(PathDefinition.TaskJsonDirectoryPath, "Tasks");
-            _taskManagementPageDataContext = context;
         }
 
         protected override void _onLoaded()
@@ -54,10 +41,11 @@ namespace DailyProject_221204
 
             _addUnloadDispose(_tasks);
             _addUnloadDispose(_tasks.SubscribeCollectionChange(() => _notifyUpdateView()));
-            _addUnloadDispose(_tasks.SubscribeSelect(vm => _taskManagementPageDataContext.SelectEventPublisher.Publish(vm.Model)));
-            _addUnloadDispose(_tasks.SubscribeAddSchedule(vm => _taskManagementPageDataContext.AddScheduleEventPublisher.Publish(vm.Model)));
+            _addUnloadDispose(_tasks.SubscribeSelect(vm => _taskManagementContext.SelectEventPublisher.Publish(vm.Model)));
+            _addUnloadDispose(_tasks.SubscribeAddSchedule(vm => _taskManagementContext.AddScheduleEventPublisher.Publish(vm.Model)));
 
-            _addUnloadDispose(_taskManagementPageDataContext.StatusUpdateEventPublisher.Subscribe(vm => _notifyUpdateView()));
+            _addUnloadDispose(_taskManagementContext.StatusUpdateEventPublisher.Subscribe(vm => _notifyUpdateView()));
+            _addUnloadDispose(_taskManagementContext.AddTaskEventPublisher.Subscribe(_addTask));
             //_addUnloadDispose(_taskManagementPageDataContext.SubscribeAutoSave(_onAutoSave));
 
             _loadTask();
@@ -75,8 +63,7 @@ namespace DailyProject_221204
             _tasks.Clear();
             foreach (var model in _taskSaveDataHandler.GetValue())
             {
-                var viewModel = new TaskListItemViewModel(model);
-                _tasks.Add(viewModel);
+                _addTask(model);
             }
         }
         void _saveTask()
@@ -88,6 +75,12 @@ namespace DailyProject_221204
         {
             _saveTask();
             WriteSaveData();
+        }
+        void _addTask(TaskModel taskModel)
+        {
+            var viewModel = new TaskListItemViewModel(taskModel);
+            _tasks.Add(viewModel);
+            _notifyUpdateView();
         }
     }
 }

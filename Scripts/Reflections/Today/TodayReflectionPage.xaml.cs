@@ -33,7 +33,7 @@ namespace DailyProject_221204
         ISaveDataHandler<DayReflectionModel> _yesterdaySaveDataHandler = null!;
         ISaveDataHandler<DayReflectionModel> _todaySaveDataHandler = null!;
 
-        readonly DPMainWindowDataContext _dPMainWindowDataContext = null!;
+        readonly DPContext _dpContext = null!;
 
         public DayReflectionViewModel YesterdayReflection { get; private set; } = null!;
         public DayReflectionViewModel TodayReflection { get; private set; } = null!;
@@ -41,15 +41,21 @@ namespace DailyProject_221204
         public StandardCommand SwitchPageToTaskManagementPageCommand { get; } = null!;
         public StandardCommand SwitchPageToWeekReflectionPageCommand { get; } = null!;
 
-        public TodayReflectionPageDataContext(DPMainWindowDataContext dpMainWindowDataContext)
+        public TodayReflectionPageDataContext(DPContext dpContext)
         {
-            _dPMainWindowDataContext = dpMainWindowDataContext;
+            _dpContext = dpContext;
 
             var reflectionModel = new DayReflectionModel();
             var reflectionViewModel = new DayReflectionViewModel(reflectionModel);
 
-            SwitchPageToTaskManagementPageCommand = new StandardCommand(o => _dPMainWindowDataContext.SwitchPage(PageType.TaskManagement));
-            SwitchPageToWeekReflectionPageCommand = new StandardCommand(o => _dPMainWindowDataContext.SwitchPage(PageType.WeekReflection));
+            SwitchPageToTaskManagementPageCommand = new StandardCommand(o => _dpContext.SwitchPage(PageType.TaskManagement));
+            SwitchPageToWeekReflectionPageCommand = new StandardCommand(o => _dpContext.SwitchPage(PageType.WeekReflection));
+
+            var yesterdaySaveFileName = $"{DateTime.Today.AddDays(-1).ToString(_dayReflectionJsonFileNameFormat)}";
+            _yesterdaySaveDataHandler = _registerSaveData<DayReflectionModel>(PathDefinition.DayReflectionsJsonDirectoryPath, yesterdaySaveFileName);
+
+            var todaySaveFileName = $"{DateTime.Today.ToString(_dayReflectionJsonFileNameFormat)}";
+            _todaySaveDataHandler = _registerSaveData<DayReflectionModel>(PathDefinition.DayReflectionsJsonDirectoryPath, todaySaveFileName);
 
             _addViewProperty(nameof(YesterdayReflection));
             _addViewProperty(nameof(TodayReflection));
@@ -59,13 +65,7 @@ namespace DailyProject_221204
         {
             base._onLoaded();
 
-            var yesterdaySaveFileName = $"{DateTime.Today.AddDays(-1).ToString(_dayReflectionJsonFileNameFormat)}";
-            _yesterdaySaveDataHandler = _registerSaveData<DayReflectionModel>(PathDefinition.DayReflectionsJsonDirectoryPath, yesterdaySaveFileName);
-
             YesterdayReflection = _instanceDayReflectionViewModel(_yesterdaySaveDataHandler.GetValue());
-
-            var todaySaveFileName = $"{DateTime.Today.ToString(_dayReflectionJsonFileNameFormat)}";
-            _todaySaveDataHandler = _registerSaveData<DayReflectionModel>(PathDefinition.DayReflectionsJsonDirectoryPath, todaySaveFileName);
 
             var todayModel = new DayReflectionModel()
             {

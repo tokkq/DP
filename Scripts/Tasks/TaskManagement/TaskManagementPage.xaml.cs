@@ -21,16 +21,24 @@ namespace DailyProject_221204
     /// </summary>
     public partial class TaskManagementPage : Page
     {
+        TaskAddWindow _taskAddWindow = null!;
+
         public TaskManagementPage()
         {
             InitializeComponent();
         }
 
-        public void InitializePage(TaskEditorPage taskEditorPage, TaskListPage taskListPage, ScheduleListPage scheduleListPage)
+        public void Initialize(TaskEditorPage taskEditorPage, TaskListPage taskListPage, ScheduleListPage scheduleListPage, TaskAddWindow taskAddWindow)
         {
             _editFrame.Navigate(taskEditorPage);
             _taskListFrame.Navigate(taskListPage);
             _scheduleFrame.Navigate(scheduleListPage);
+            _taskAddWindow = taskAddWindow;
+        }
+
+        public void OpenAddTaskWindow()
+        {
+            _taskAddWindow.Show();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

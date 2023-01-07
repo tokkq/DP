@@ -2,19 +2,15 @@
 
 namespace DailyProject_221204
 {
-    public class DPMainWindowDataContext : AbstractWindowDataContext
+    public class MainWindowDataContext : AbstractWindowDataContext
     {
-        readonly EventPublisher<PageType> _switchPageEventPublisher = new EventPublisher<PageType>();
+        readonly DPContext _dpContext = null!;
 
-        public IDisposable SubscribeSwitchPage(Action<PageType> action) => _switchPageEventPublisher.Subscribe(action);
+        public MainWindowDataContext(DPContext dpContext)
+        {
+            _dpContext = dpContext;
+        }
 
-        public void SwitchPage(PageType pageType)
-        {
-            _switchPageEventPublisher.Publish(pageType);
-        }
-        public PageType GetInitialPageType()
-        {
-            return PageType.TodayReflection;
-        }
-    }
+        public IDisposable SubscribeSwitchPage(Action<PageType> action) => _dpContext.SubscribeSwitchPage(action);
+    } 
 }

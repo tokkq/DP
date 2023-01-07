@@ -23,6 +23,47 @@ namespace DailyProject_221204
         {
             InitializeComponent();
         }
+
+        public void Initialize(TaskEditorPage taskEditorPage)
+        {
+            _taskEditFrame.Navigate(taskEditorPage);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Visibility = Visibility.Hidden;
+        }
     }
 
+    public class TaskAddWindowDataContext : AbstractWindowDataContext
+    {
+        readonly TaskManagementContext _taskManagementContext = null!;
+
+        public TaskEditViewModel Task { get; set; } = null!;
+
+        public TaskAddWindowDataContext(TaskManagementContext taskManagementContext)
+        {
+            _addViewProperty(nameof(Task));
+
+            _taskManagementContext = taskManagementContext;
+        }
+
+        protected override void _onLoaded()
+        {
+            base._onLoaded();
+
+            var taskModel = new TaskModel()
+            {
+                Name = "NewTask",
+                Description = "",
+                StartAt = DateTime.Now,
+                CreateAt = DateTime.Now,
+                UpdateAt = DateTime.Now,
+            };
+            Task = new TaskEditViewModel(taskModel);
+
+            DPDebug.WriteLine($"[Name: {taskModel.Name}]Set NewTask.");
+        }
+    }
 }

@@ -26,7 +26,6 @@ namespace DailyProject_221204
 
         protected AbstractFrameworkElementDataContext()
         {
-            _unloadDisposables.Add(UpdateViewCommand.Subscribe(_notifyUpdateView));
         }
 
         /// <summary>
@@ -34,6 +33,10 @@ namespace DailyProject_221204
         /// </summary>
         public void OnLoaded()
         {
+            DPDebug.WriteLine($"[type: {GetType()}]OnLoaded");
+
+            _addUnloadDispose(UpdateViewCommand.Subscribe(_notifyUpdateView));
+
             ReadSaveData();
 
             _onLoaded();
@@ -45,6 +48,8 @@ namespace DailyProject_221204
         /// </summary>
         public void OnUnloaded()
         {
+            DPDebug.WriteLine($"[type: {GetType()}]OnUnloaded");
+
             _onUnloaded();
 
             WriteSaveData();
@@ -123,7 +128,7 @@ namespace DailyProject_221204
 
         void _onPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            Debug.WriteLine($"[PropertyName: {propertyName}]OnPropertyChanged");
+            DPDebug.WriteLine($"[CallerClassType: {GetType()}][PropertyName: {propertyName}]OnPropertyChanged.");
 
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
