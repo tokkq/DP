@@ -28,17 +28,11 @@ namespace DailyProject_221204
             InitializeComponent();
         }
 
-        public void Initialize(TaskEditorPage taskEditorPage, TaskListPage taskListPage, ScheduleListPage scheduleListPage, TaskAddWindow taskAddWindow)
+        public void Initialize(TaskEditorPage taskEditorPage, TaskListPage taskListPage, ScheduleListPage scheduleListPage)
         {
             _editFrame.Navigate(taskEditorPage);
             _taskListFrame.Navigate(taskListPage);
             _scheduleFrame.Navigate(scheduleListPage);
-            _taskAddWindow = taskAddWindow;
-        }
-
-        public void OpenAddTaskWindow()
-        {
-            _taskAddWindow.Show();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

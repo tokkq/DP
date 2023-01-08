@@ -2,11 +2,12 @@
     x:Class="DailyProject_221204.TaskAddWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:DailyProject_221204="clr-namespace:DailyProject_221204"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="TaskAddWindow"
     Width="450"
-    Height="800"
+    Height="500"
     Closing="Window_Closing"
     Style="{DynamicResource StandardWindowStyle}"
     mc:Ignorable="d"
@@ -16,6 +17,7 @@
 
         <Button
             Height="32"
+            Command="{Binding TaskAddCommand}"
             Content="Taskを追加"
             >
 
@@ -28,12 +30,9 @@
 
         </Separator>
 
-        <Frame
-            x:Name="_taskEditFrame"
-            NavigationUIVisibility="Hidden"
-            >
+        <DailyProject_221204:TaskEditView Task="{Binding Task}">
 
-        </Frame>
+        </DailyProject_221204:TaskEditView>
 
     </StackPanel>
 

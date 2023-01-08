@@ -24,11 +24,6 @@ namespace DailyProject_221204
             InitializeComponent();
         }
 
-        public void Initialize(TaskEditorPage taskEditorPage)
-        {
-            _taskEditFrame.Navigate(taskEditorPage);
-        }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = true;
@@ -42,8 +37,16 @@ namespace DailyProject_221204
 
         public TaskEditViewModel Task { get; set; } = null!;
 
+        public EventCommand TaskAddCommand { get; } = new EventCommand();
+
         public TaskAddWindowDataContext(TaskManagementContext taskManagementContext)
         {
+            _addUnloadDispose(TaskAddCommand.Subscribe(__onTaskAddCommand));
+            void __onTaskAddCommand()
+            {
+                taskManagementContext.AddTaskEventPublisher.Publish(Task.Model);
+            }
+
             _addViewProperty(nameof(Task));
 
             _taskManagementContext = taskManagementContext;
@@ -53,17 +56,25 @@ namespace DailyProject_221204
         {
             base._onLoaded();
 
-            var taskModel = new TaskModel()
+            _initializeTask();
+        }
+
+        void _initializeTask()
+        {
+            var model = new TaskModel()
             {
-                Name = "NewTask",
-                Description = "",
                 StartAt = DateTime.Now,
                 CreateAt = DateTime.Now,
                 UpdateAt = DateTime.Now,
             };
-            Task = new TaskEditViewModel(taskModel);
-
-            DPDebug.WriteLine($"[Name: {taskModel.Name}]Set NewTask.");
+            var viewModel = new TaskEditViewModel(model);
+            
+            Task = viewModel;
         }
+    }
+
+    public class TaskAddPageDataContext : AbstractPageDataContext
+    {
+        
     }
 }

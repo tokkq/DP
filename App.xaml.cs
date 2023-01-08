@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
@@ -81,10 +82,17 @@ namespace DailyProject_221204
             _subscribePage(scheduleListPage, scheduleListPageDataContext);
 
             var taskAddWindowDataContext = new TaskAddWindowDataContext(taskManagementContext);
-            var taskAddWindow = new TaskAddWindow();
-            taskAddWindow.SubscribeWindowDataContext(taskAddWindowDataContext);
 
-            taskManagementPage.Initialize(taskEditorPage, taskListPage, scheduleListPage, taskAddWindow);
+            taskManagementPage.Subscribe(taskManagementContext.OpenAddTaskWindowEventPublisher.Subscribe(__instanceTaskAddWindow));
+            void __instanceTaskAddWindow()
+            {
+                var taskAddWindow = new TaskAddWindow();
+                taskAddWindow.SubscribeWindowDataContext(taskAddWindowDataContext);
+                taskAddWindow.Subscribe(taskAddWindowDataContext.TaskAddCommand.Subscribe(taskAddWindow.Close));
+                taskAddWindow.Show();
+            }
+
+            taskManagementPage.Initialize(taskEditorPage, taskListPage, scheduleListPage);
 
             _pageMap[(int)PageType.TaskManagement] = taskManagementPage;
 

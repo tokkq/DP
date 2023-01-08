@@ -46,7 +46,6 @@ namespace DailyProject_221204
 
             _addUnloadDispose(_taskManagementContext.StatusUpdateEventPublisher.Subscribe(vm => _notifyUpdateView()));
             _addUnloadDispose(_taskManagementContext.AddTaskEventPublisher.Subscribe(_addTask));
-            //_addUnloadDispose(_taskManagementPageDataContext.SubscribeAutoSave(_onAutoSave));
 
             _loadTask();
         }
