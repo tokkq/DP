@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace DailyProject_221204
 {
@@ -20,10 +22,17 @@ namespace DailyProject_221204
             {
                 item.RemoveEventCommand.Subscribe(() => Remove(item)),
                 item.SelectEventCommand.Subscribe(() => _select(item)),
-                item.ChangeStatusEventCommand.Subscribe(() => _changeCompleteEventPublisher.Publish(item)),
+                item.ChangeStatusEventCommand.Subscribe(__onStatusChange),
                 item.AddScheduleEventCommand.Subscribe(() => _addScheduleEventPublisher.Publish(item)),
             });
+
+            void __onStatusChange()
+            {
+                _sort();
+                _changeCompleteEventPublisher.Publish(item);
+            }
         }
+
 
         void _select(TaskListItemViewModel item) 
         {
@@ -46,6 +55,16 @@ namespace DailyProject_221204
             DPDebug.WriteLine($"[Name: {item.Model.Name}] Unselect");
 
             item.TurnOffHighlight();
+        }
+
+        protected override IEnumerable<TaskListItemViewModel> _sort(IEnumerable<TaskListItemViewModel> items)
+        {
+            items = items
+                .OrderBy(vm => vm.Model.MyPriority)
+                .ThenBy(vm => vm.Model.OtherPriority)
+                .ThenBy(vm => vm.Model.StartAt);
+
+            return items;
         }
     }
 }

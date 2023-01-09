@@ -47,6 +47,7 @@
                                             Height="32"
                                             Padding="2"
                                             VerticalContentAlignment="Center"
+                                            AcceptsReturn="False"
                                             Background="Black"
                                             Foreground="White"
                                             Text="{Binding Task.Model.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

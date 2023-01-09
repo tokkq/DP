@@ -61,14 +61,18 @@ namespace DailyProject_221204
                 hotKeyId = _getHotKeyId();
             }
 
-            Debug.WriteLine($"[key: {key}][modifierKey: {modifierKey}][hotKeyId: {hotKeyId}]グローバルホットキーを設定します。");
+            var unsubscribe = new ActionDisposer(() => _unsbscribeGlobalHotkey(hotKeyId));
 
             if (result == 0)
             {
                 Debug.Assert(false, "GlobalHotKeyに登録するために適したIDが見つかりませんでした。");
+
+                unsubscribe = new ActionDisposer(() => Debug.WriteLine($"[key: {key}][modifierKey: {modifierKey}][hotKeyId: {hotKeyId}]登録に失敗したグローバルホットキーのDisposeが行われました。"));
+                return unsubscribe;
             }
 
-            var unsubscribe = new ActionDisposer(() => _unsbscribeGlobalHotkey(hotKeyId));
+            Debug.WriteLine($"[key: {key}][modifierKey: {modifierKey}][hotKeyId: {hotKeyId}]グローバルホットキーを設定します。");
+
             return unsubscribe;
         }
 

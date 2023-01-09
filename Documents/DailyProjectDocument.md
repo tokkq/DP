@@ -13,9 +13,22 @@ DailyProjectは、タスク管理やメモの管理、スケジュールの管�
 - ViewModelはXAMLにバインドするために使う
 - ViewはXAMLのみに記入する
 
-![001](https://i.imgur.com/6c3WO0u.png)
+### DataContext
+WPFのコンポーネントにあるDataContextに指定するためのクラス。
 
-## アイデア
-- 一日のメモを作成し、簡易的に開くことができる機能
-- 定期的なスケジュールを自動的に追加する機能
-- リューちゃんにヘッドセットをあげる
+### Controller
+要素の初期化と必要なデータを保持するクラス。
+
+### Domain
+クラス間で共通の情報の保持やロジック処理を行うためのクラス。
+
+### ViewModel
+ModelとViewの情報と保持するクラス。
+
+### View
+XAMLやWPFのコンポーネント（FramewrokElement）の子クラス。
+
+### Model
+Viewにかかわらない情報を保持するためのクラス。
+
+![001](https://i.imgur.com/6c3WO0u.png)

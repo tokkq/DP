@@ -7,7 +7,8 @@ using DailyProject_221204.Scripts;
 namespace DailyProject_221204
 {
     public class TaskListItemViewModel : AbstractViewModel<TaskModel>
-    {        readonly ViewColor _normalColor = new("#FF2D2D2D");
+    {        
+        readonly ViewColor _normalColor = new("#FF2D2D2D");
         readonly ViewColor _highlightColor = new("#FFCECECE");
 
         public TaskListItemViewModel(TaskModel model) : base(model)
