@@ -24,6 +24,8 @@ namespace DailyProject_221204
         readonly HashSet<string> _viewProperties = new();
         readonly HashSet<ISaveData> _saveDataSet = new();
 
+        bool _isLoaded = false;
+
         protected AbstractFrameworkElementDataContext()
         {
         }
@@ -42,19 +44,31 @@ namespace DailyProject_221204
             _onLoaded();
 
             _notifyUpdateView();
+
+            _isLoaded = true;
         }
         /// <summary>
         /// FrameworkElementのUnloadedイベントに紐づけられる関数
         /// </summary>
         public void OnUnloaded()
         {
+            if (_isLoaded == false)
+            {
+                DPDebug.WriteLine($"[type: {GetType()}]Load前にUnloadが呼ばれました。Unload処理をスキップします。");
+                return;
+            }
+
             DPDebug.WriteLine($"[type: {GetType()}]OnUnloaded");
 
             _onUnloaded();
 
             WriteSaveData();
 
+            _saveDataSet.Clear();
+
             _unloadDisposables.Dispose();
+
+            _isLoaded = false;
         }
 
         /// <summary>

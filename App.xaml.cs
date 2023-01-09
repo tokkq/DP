@@ -8,6 +8,7 @@ using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Interop;
 
 namespace DailyProject_221204
 {
@@ -35,15 +36,23 @@ namespace DailyProject_221204
 
             Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
 
-            var dpContext = new DPContext();
-
-            var mainWindowDataContext = new MainWindowDataContext(dpContext);
             var mainWindow = (MainWindow)MainWindow;
             if (mainWindow == null)
             {
-                throw new InvalidCastException($"MainWindowの取得に失敗しました。");
+                DPDebug.Assert($"MainWindowの取得に失敗しました。");
+                return;
             }
-            mainWindow.SubscribeWindowDataContext(mainWindowDataContext);
+            
+            var host = new WindowInteropHelper(mainWindow);
+            if (host == null)
+            {
+                DPDebug.Assert($"MainWindowの取得に失敗しました。");
+                return;
+            }
+
+            var globalHotKey = new GlobalHotKey(host.Handle);
+            
+            var dpContext = new DPContext(globalHotKey);
 
             dpContext.SubscribeSwitchPage(__onSwitchPage);
             void __onSwitchPage(PageType pageType)
@@ -54,6 +63,11 @@ namespace DailyProject_221204
                 }
             }
 
+            var mainWindowDataContext = new MainWindowDataContext(dpContext);
+
+            mainWindow.SubscribeWindowDataContext(mainWindowDataContext);
+            mainWindow.Subscribe(dpContext);
+
             var taskManagementPage = _instanceTaskManagementPage(dpContext);
             var todayReflectionPage = _instanceTodayReflectionPage(dpContext);
             var weekReflectionPage = _instanceWeekReflectionPage(dpContext);
@@ -63,27 +77,29 @@ namespace DailyProject_221204
 
         TaskManagementPage _instanceTaskManagementPage(DPContext dpContext)
         {
-            var taskManagementContext = new TaskManagementContext(dpContext);
+            // TaskManagementPageにサブスクライブするのが自然そうだが、初期化をどこで行うかを検討する必要がある。
+            var taskManagementDomain = new TaskManagementDomain(dpContext);
+            MainWindow.Subscribe(taskManagementDomain);
 
-            var taskManagementPageDataContext = new TaskManagementPageDataContext(taskManagementContext);
+            var taskManagementPageDataContext = new TaskManagementPageDataContext(taskManagementDomain);
             var taskManagementPage = new TaskManagementPage();
             _subscribePage(taskManagementPage, taskManagementPageDataContext);
 
-            var taskEditorDataContext = new TaskEditorPageDataContext(taskManagementContext);
+            var taskEditorDataContext = new TaskEditorPageDataContext(taskManagementDomain);
             var taskEditorPage = new TaskEditorPage();
             _subscribePage(taskEditorPage, taskEditorDataContext);
 
-            var taskListPageDataContext = new TaskListPageDataContext(taskManagementContext);
+            var taskListPageDataContext = new TaskListPageDataContext(taskManagementDomain);
             var taskListPage = new TaskListPage();
             _subscribePage(taskListPage, taskListPageDataContext);
 
-            var scheduleListPageDataContext = new ScheduleListPageDataContext(taskManagementContext);
+            var scheduleListPageDataContext = new ScheduleListPageDataContext(taskManagementDomain);
             var scheduleListPage = new ScheduleListPage();
             _subscribePage(scheduleListPage, scheduleListPageDataContext);
 
-            var taskAddWindowDataContext = new TaskAddWindowDataContext(taskManagementContext);
+            var taskAddWindowDataContext = new TaskAddWindowDataContext(taskManagementDomain);
 
-            taskManagementPage.Subscribe(taskManagementContext.OpenAddTaskWindowEventPublisher.Subscribe(__instanceTaskAddWindow));
+            taskManagementPage.Subscribe(taskManagementDomain.OpenAddTaskWindowEventPublisher.Subscribe(__instanceTaskAddWindow));
             void __instanceTaskAddWindow()
             {
                 var taskAddWindow = new TaskAddWindow();

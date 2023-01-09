@@ -28,10 +28,10 @@ namespace DailyProject_221204
 
         ScheduleListItems _schedules { get; } = new();
         DateTime _displayDay = DateTime.Today;
-        TaskManagementContext _taskManagementContext = null!;
+        TaskManagementDomain _taskManagementContext = null!;
         ISaveDataHandler<List<ScheduleModel>> _saveDataHandler = null!;
 
-        public ScheduleListPageDataContext(TaskManagementContext taskManagementContext) : base(taskManagementContext)
+        public ScheduleListPageDataContext(TaskManagementDomain taskManagementContext) : base(taskManagementContext)
         {
             _addViewProperty(nameof(DisplayDay));
             _addViewProperty(nameof(DisplaySchedules));

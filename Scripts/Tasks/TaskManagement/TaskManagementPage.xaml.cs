@@ -21,8 +21,6 @@ namespace DailyProject_221204
     /// </summary>
     public partial class TaskManagementPage : Page
     {
-        TaskAddWindow _taskAddWindow = null!;
-
         public TaskManagementPage()
         {
             InitializeComponent();
@@ -33,16 +31,6 @@ namespace DailyProject_221204
             _editFrame.Navigate(taskEditorPage);
             _taskListFrame.Navigate(taskListPage);
             _scheduleFrame.Navigate(scheduleListPage);
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
-        private void Page_Unloaded(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

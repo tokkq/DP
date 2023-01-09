@@ -2,11 +2,11 @@
 {
     public class AbstractTaskManagementPageDataContext : AbstractPageDataContext
     {
-        readonly protected TaskManagementContext _taskManagementContext = null!;
+        readonly protected TaskManagementDomain _taskManagementDomain = null!;
 
-        public AbstractTaskManagementPageDataContext(TaskManagementContext taskManagementContext)
+        public AbstractTaskManagementPageDataContext(TaskManagementDomain taskManagementDomain)
         {
-            _taskManagementContext = taskManagementContext;
+            _taskManagementDomain = taskManagementDomain;
         }
     }
 }

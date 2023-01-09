@@ -2,7 +2,7 @@
 {
     public class TaskEditorPageDataContext : AbstractTaskManagementPageDataContext
     {
-        public TaskEditorPageDataContext(TaskManagementContext taskManagementContext) : base(taskManagementContext)
+        public TaskEditorPageDataContext(TaskManagementDomain taskManagementContext) : base(taskManagementContext)
         {
             _addUnloadDispose(taskManagementContext.SelectEventPublisher.Subscribe(_onTaskSelect));
             _addUnloadDispose(Task.ChangeStatusCommand.Subscribe(() => taskManagementContext.StatusUpdateEventPublisher.Publish(Task.Model)));

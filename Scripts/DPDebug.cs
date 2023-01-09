@@ -11,5 +11,9 @@ namespace DailyProject_221204
         {
             Debug.WriteLine($"[DP]{text}");
         }
+        public static void Assert(string text)
+        {
+            Debug.Assert(false, $"[DP]{text}");
+        }
     }
 }
