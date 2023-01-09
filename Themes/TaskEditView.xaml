@@ -18,24 +18,10 @@
 
                     <DockPanel>
 
-                        <Label
-                            Content="TaskEditor"
-                            DockPanel.Dock="Top"
-                            Foreground="White"
-                            >
-
-                        </Label>
-
-                        <Separator
-                            Height="4"
-                            DockPanel.Dock="Top"
-                            >
-
-                        </Separator>
-
                         <TabControl
                             Margin="2"
                             Background="#FF2D2D2D"
+                            BorderThickness="0"
                             DockPanel.Dock="Top"
                             >
 
@@ -57,6 +43,7 @@
                                         </Label>
 
                                         <TextBox
+                                            x:Name="_taskNameText"
                                             Height="32"
                                             Padding="2"
                                             VerticalContentAlignment="Center"

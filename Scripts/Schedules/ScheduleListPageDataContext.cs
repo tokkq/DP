@@ -36,7 +36,7 @@ namespace DailyProject_221204
             _addViewProperty(nameof(DisplayDay));
             _addViewProperty(nameof(DisplaySchedules));
 
-            _saveDataHandler = _registerSaveData<List<ScheduleModel>>(PathDefinition.SchedulesJsonDirectoryPath, "Schedule");
+            _saveDataHandler = _registerSaveData<List<ScheduleModel>>(PathDefinition.SchedulesDirectoryPath, "Schedule");
 
             _taskManagementContext = taskManagementContext;
         }

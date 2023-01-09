@@ -28,8 +28,6 @@ namespace DailyProject_221204
 
     public class TodayReflectionPageDataContext : AbstractPageDataContext
     {
-        static readonly string _dayReflectionJsonFileNameFormat = "yyyyMMdd";
-
         ISaveDataHandler<DayReflectionModel> _yesterdaySaveDataHandler = null!;
         ISaveDataHandler<DayReflectionModel> _todaySaveDataHandler = null!;
 
@@ -51,11 +49,11 @@ namespace DailyProject_221204
             SwitchPageToTaskManagementPageCommand = new StandardCommand(o => _dpContext.SwitchPage(PageType.TaskManagement));
             SwitchPageToWeekReflectionPageCommand = new StandardCommand(o => _dpContext.SwitchPage(PageType.WeekReflection));
 
-            var yesterdaySaveFileName = $"{DateTime.Today.AddDays(-1).ToString(_dayReflectionJsonFileNameFormat)}";
-            _yesterdaySaveDataHandler = _registerSaveData<DayReflectionModel>(PathDefinition.DayReflectionsJsonDirectoryPath, yesterdaySaveFileName);
+            var yesterdaySaveFileName = $"{DateTime.Today.AddDays(-1).ToString(PathDefinition.DateFormat)}";
+            _yesterdaySaveDataHandler = _registerSaveData<DayReflectionModel>(PathDefinition.DayReflectionsDirectoryPath, yesterdaySaveFileName);
 
-            var todaySaveFileName = $"{DateTime.Today.ToString(_dayReflectionJsonFileNameFormat)}";
-            _todaySaveDataHandler = _registerSaveData<DayReflectionModel>(PathDefinition.DayReflectionsJsonDirectoryPath, todaySaveFileName);
+            var todaySaveFileName = $"{DateTime.Today.ToString(PathDefinition.DateFormat)}";
+            _todaySaveDataHandler = _registerSaveData<DayReflectionModel>(PathDefinition.DayReflectionsDirectoryPath, todaySaveFileName);
 
             _addViewProperty(nameof(YesterdayReflection));
             _addViewProperty(nameof(TodayReflection));

@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace DailyProject_221204
 {
@@ -12,6 +13,9 @@ namespace DailyProject_221204
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
+
+            var nameTextBox = _getElement<TextBox>("_taskNameText");
+            nameTextBox.Focus();
         }
 
         public TaskEditViewModel Task

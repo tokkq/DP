@@ -26,5 +26,10 @@ namespace DailyProject_221204
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -11,9 +11,24 @@
     Style="{DynamicResource StandardPageStyle}"
     mc:Ignorable="d"
     >
+    <DockPanel>
 
-    <DailyProject_221204:TaskEditView Task="{Binding Task}">
+        <Label
+            VerticalContentAlignment="Center"
+            Background="Black"
+            Content="TaskEdit"
+            DockPanel.Dock="Top"
+            FontSize="8"
+            FontWeight="Bold"
+            Foreground="White"
+            >
 
-    </DailyProject_221204:TaskEditView>
+        </Label>
+
+        <DailyProject_221204:TaskEditView Task="{Binding Task}">
+
+        </DailyProject_221204:TaskEditView>
+
+    </DockPanel>
 
 </Page>

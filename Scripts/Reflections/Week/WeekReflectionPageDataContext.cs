@@ -4,8 +4,6 @@ namespace DailyProject_221204
 {
     public class WeekReflectionPageDataContext : AbstractPageDataContext
     {
-        static readonly string _dayReflectionJsonFileNameFormat = "yyyyMMdd";
-
         ISaveDataHandler<WeekReflectionModel> _lastWeekSaveDataHandler = null!;
         ISaveDataHandler<WeekReflectionModel> _thisWeekSaveDataHandler = null!;
 
@@ -28,9 +26,9 @@ namespace DailyProject_221204
             _addViewProperty(nameof(ThisWeekReflection));
 
             var lastWeekSaveFileName = _getWeekJsonFileName(DateTime.Today.AddDays(-7));
-            _lastWeekSaveDataHandler = _registerSaveData<WeekReflectionModel>(PathDefinition.WeekReflectionsJsonDirectoryPath, lastWeekSaveFileName);
+            _lastWeekSaveDataHandler = _registerSaveData<WeekReflectionModel>(PathDefinition.WeekReflectionsDirectoryPath, lastWeekSaveFileName);
             var thisWeekSaveFileName = _getWeekJsonFileName(DateTime.Today);
-            _thisWeekSaveDataHandler = _registerSaveData<WeekReflectionModel>(PathDefinition.WeekReflectionsJsonDirectoryPath, thisWeekSaveFileName);
+            _thisWeekSaveDataHandler = _registerSaveData<WeekReflectionModel>(PathDefinition.WeekReflectionsDirectoryPath, thisWeekSaveFileName);
         }
 
         protected override void _onLoaded()
@@ -58,8 +56,8 @@ namespace DailyProject_221204
 
         string _getWeekJsonFileName(DateTime day)
         {
-            var weekStartDayText = day.GetFirstDayOfWeek().ToString(_dayReflectionJsonFileNameFormat);
-            var weekEndDayText = day.GetLastDayOfWeek().ToString(_dayReflectionJsonFileNameFormat);
+            var weekStartDayText = day.GetFirstDayOfWeek().ToString(PathDefinition.DateFormat);
+            var weekEndDayText = day.GetLastDayOfWeek().ToString(PathDefinition.DateFormat);
             var thisWeekFileName = $"{weekStartDayText}_{weekEndDayText}";
             return thisWeekFileName;
         }

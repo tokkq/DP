@@ -9,6 +9,7 @@
     Width="450"
     Height="500"
     Closing="Window_Closing"
+    Loaded="Window_Loaded"
     Style="{DynamicResource StandardWindowStyle}"
     mc:Ignorable="d"
     >

@@ -5,12 +5,19 @@ namespace DailyProject_221204
 {
     static class PathDefinition
     {
-        public static string RootPath = AppDomain.CurrentDomain.BaseDirectory;
+        public static readonly string RootPath = AppDomain.CurrentDomain.BaseDirectory;
 
-        public static string TaskJsonDirectoryPath = Path.Combine(RootPath, @"Data\Tasks");
-        public static string SchedulesJsonDirectoryPath = Path.Combine(RootPath, @"Data\Schedules");
-        public static string ReflectionsJsonDirectoryPath = Path.Combine(RootPath, @"Data\Reflections");
-        public static string DayReflectionsJsonDirectoryPath = Path.Combine(ReflectionsJsonDirectoryPath, @"Day");
-        public static string WeekReflectionsJsonDirectoryPath = Path.Combine(ReflectionsJsonDirectoryPath, @"Week");
+        public static readonly string DataDirecotryPath = Path.Combine(RootPath, @"Data");
+
+        public static readonly string TaskDirectoryPath = Path.Combine(DataDirecotryPath, @"Tasks");
+        public static readonly string SchedulesDirectoryPath = Path.Combine(DataDirecotryPath, @"Schedules");
+        
+        public static readonly string ReflectionsDirectoryPath = Path.Combine(DataDirecotryPath, @"Reflections");
+        public static readonly string DayReflectionsDirectoryPath = Path.Combine(ReflectionsDirectoryPath, @"Day");
+        public static readonly string WeekReflectionsDirectoryPath = Path.Combine(ReflectionsDirectoryPath, @"Week");
+
+        public static readonly string DailyMemoDirectoryPath = Path.Combine(DataDirecotryPath, @"DailyMemo");
+
+        public static readonly string DateFormat = "yyyyMMdd";
     }
 }

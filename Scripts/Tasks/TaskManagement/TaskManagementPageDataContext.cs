@@ -25,7 +25,7 @@ namespace DailyProject_221204
 
             _addUnloadDispose(_taskManagementDomain.DPDomain.GlobalHotKey.SubscribeGlobalHotKey(_publishOpenAddTaskWindowEvent, Key.Q, ModifierKeys.Alt));
 
-            _taskSaveDataHandler = _registerSaveData<List<TaskModel>>(PathDefinition.TaskJsonDirectoryPath, "Tasks");
+            _taskSaveDataHandler = _registerSaveData<List<TaskModel>>(PathDefinition.TaskDirectoryPath, "Tasks");
             _loadTask();
         }
 
