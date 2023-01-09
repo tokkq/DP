@@ -33,7 +33,7 @@ namespace DailyProject_221204
         ISaveDataHandler<DayReflectionModel> _yesterdaySaveDataHandler = null!;
         ISaveDataHandler<DayReflectionModel> _todaySaveDataHandler = null!;
 
-        readonly DPContext _dpContext = null!;
+        readonly DPDomain _dpContext = null!;
 
         public DayReflectionViewModel YesterdayReflection { get; private set; } = null!;
         public DayReflectionViewModel TodayReflection { get; private set; } = null!;
@@ -41,7 +41,7 @@ namespace DailyProject_221204
         public StandardCommand SwitchPageToTaskManagementPageCommand { get; } = null!;
         public StandardCommand SwitchPageToWeekReflectionPageCommand { get; } = null!;
 
-        public TodayReflectionPageDataContext(DPContext dpContext)
+        public TodayReflectionPageDataContext(DPDomain dpContext)
         {
             _dpContext = dpContext;
 

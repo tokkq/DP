@@ -9,7 +9,7 @@ namespace DailyProject_221204
         ISaveDataHandler<WeekReflectionModel> _lastWeekSaveDataHandler = null!;
         ISaveDataHandler<WeekReflectionModel> _thisWeekSaveDataHandler = null!;
 
-        readonly DPContext _dpContext = null!;
+        readonly DPDomain _dpContext = null!;
 
         public WeekReflectionViewModel LastWeekReflection { get; private set; } = null!;
         public WeekReflectionViewModel ThisWeekReflection { get; private set; } = null!;
@@ -17,7 +17,7 @@ namespace DailyProject_221204
         public StandardCommand SwitchPageToTaskManagement { get; } = null!;
         public StandardCommand SwitchPageToTodayReflectionPage { get; } = null!;
 
-        public WeekReflectionPageDataContext(DPContext dpContext)
+        public WeekReflectionPageDataContext(DPDomain dpContext)
         {
             _dpContext = dpContext;
 

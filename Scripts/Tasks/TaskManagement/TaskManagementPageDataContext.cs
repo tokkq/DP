@@ -23,7 +23,7 @@ namespace DailyProject_221204
         {
             base._onLoaded();
 
-            _addUnloadDispose(_taskManagementDomain.DPContext.GlobalHotKey.SubscribeGlobalHotKey(_publishOpenAddTaskWindowEvent, Key.Q, ModifierKeys.Alt));
+            _addUnloadDispose(_taskManagementDomain.DPDomain.GlobalHotKey.SubscribeGlobalHotKey(_publishOpenAddTaskWindowEvent, Key.Q, ModifierKeys.Alt));
 
             _taskSaveDataHandler = _registerSaveData<List<TaskModel>>(PathDefinition.TaskJsonDirectoryPath, "Tasks");
             _loadTask();

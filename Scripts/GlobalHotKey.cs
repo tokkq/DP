@@ -68,7 +68,7 @@ namespace DailyProject_221204
                 Debug.Assert(false, "GlobalHotKeyに登録するために適したIDが見つかりませんでした。");
             }
 
-            var unsubscribe = new ActionDisposer(() => _globalHotKeys.Remove(hotKeyId));
+            var unsubscribe = new ActionDisposer(() => _unsbscribeGlobalHotkey(hotKeyId));
             return unsubscribe;
         }
 
@@ -81,6 +81,12 @@ namespace DailyProject_221204
             }
 
             ComponentDispatcher.ThreadPreprocessMessage -= _onThreadPreprocessMessage;
+        }
+
+        void _unsbscribeGlobalHotkey(int hotKeyId)
+        {
+            _globalHotKeys.Remove(hotKeyId);
+            UnregisterHotKey(_windowHandle, hotKeyId);
         }
 
         int _getHotKeyId()

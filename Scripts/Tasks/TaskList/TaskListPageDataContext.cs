@@ -52,11 +52,6 @@ namespace DailyProject_221204
             }
         }
 
-        protected override void _onUnloaded()
-        {
-            base._onUnloaded();
-        }
-
         void _addTask(TaskModel taskModel)
         {
             var viewModel = new TaskListItemViewModel(taskModel);

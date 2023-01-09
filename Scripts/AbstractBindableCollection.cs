@@ -62,6 +62,8 @@ namespace DailyProject_221204
             {
                 _modelToDisposables[key].Dispose();
             }
+
+            Clear();
         }
         public IEnumerator<TItem> GetEnumerator()
         {

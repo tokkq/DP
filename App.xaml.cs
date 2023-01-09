@@ -52,9 +52,9 @@ namespace DailyProject_221204
 
             var globalHotKey = new GlobalHotKey(host.Handle);
             
-            var dpContext = new DPContext(globalHotKey);
+            var dpDomain = new DPDomain(globalHotKey);
 
-            dpContext.SubscribeSwitchPage(__onSwitchPage);
+            dpDomain.SubscribeSwitchPage(__onSwitchPage);
             void __onSwitchPage(PageType pageType)
             {
                 if (_pageMap.TryGetValue((int)pageType, out var page))
@@ -63,19 +63,19 @@ namespace DailyProject_221204
                 }
             }
 
-            var mainWindowDataContext = new MainWindowDataContext(dpContext);
+            var mainWindowDataContext = new MainWindowDataContext(dpDomain);
 
             mainWindow.SubscribeWindowDataContext(mainWindowDataContext);
-            mainWindow.Subscribe(dpContext);
+            mainWindow.Subscribe(dpDomain);
 
-            var taskManagementPage = _instanceTaskManagementPage(dpContext);
-            var todayReflectionPage = _instanceTodayReflectionPage(dpContext);
-            var weekReflectionPage = _instanceWeekReflectionPage(dpContext);
+            var taskManagementPage = _instanceTaskManagementPage(dpDomain);
+            var todayReflectionPage = _instanceTodayReflectionPage(dpDomain);
+            var weekReflectionPage = _instanceWeekReflectionPage(dpDomain);
 
             mainWindow.SwitchPage(todayReflectionPage);
         }
 
-        TaskManagementPage _instanceTaskManagementPage(DPContext dpContext)
+        TaskManagementPage _instanceTaskManagementPage(DPDomain dpContext)
         {
             // TaskManagementPageにサブスクライブするのが自然そうだが、初期化をどこで行うかを検討する必要がある。
             var taskManagementDomain = new TaskManagementDomain(dpContext);
@@ -103,6 +103,9 @@ namespace DailyProject_221204
             void __instanceTaskAddWindow()
             {
                 var taskAddWindow = new TaskAddWindow();
+
+                taskAddWindow.Topmost = true;
+
                 taskAddWindow.SubscribeWindowDataContext(taskAddWindowDataContext);
                 taskAddWindow.Subscribe(taskAddWindowDataContext.TaskAddCommand.Subscribe(taskAddWindow.Close));
                 taskAddWindow.Show();
@@ -115,7 +118,7 @@ namespace DailyProject_221204
             return taskManagementPage;
         }
 
-        TodayReflectionPage _instanceTodayReflectionPage(DPContext dpContext)
+        TodayReflectionPage _instanceTodayReflectionPage(DPDomain dpContext)
         {
             var todayReflectionPage = new TodayReflectionPage();
             var todayReflectionDataContext = new TodayReflectionPageDataContext(dpContext);
@@ -126,7 +129,7 @@ namespace DailyProject_221204
             return todayReflectionPage;
         }
 
-        WeekReflectionPage _instanceWeekReflectionPage(DPContext dpContext)
+        WeekReflectionPage _instanceWeekReflectionPage(DPDomain dpContext)
         {
             var weekReflectionPage = new WeekReflectionPage();
             var weekReflectionDataContext = new WeekReflectionPageDataContext(dpContext);

@@ -3,13 +3,13 @@ using System.Windows;
 
 namespace DailyProject_221204
 {
-    public class DPContext : IDisposable
+    public class DPDomain : IDisposable
     {
         public GlobalHotKey GlobalHotKey { get; } = null!;
 
         readonly EventPublisher<PageType> _switchPageEventPublisher = new EventPublisher<PageType>();
 
-        public DPContext(GlobalHotKey globalHotKey)
+        public DPDomain(GlobalHotKey globalHotKey)
         {
             GlobalHotKey = globalHotKey;
         }

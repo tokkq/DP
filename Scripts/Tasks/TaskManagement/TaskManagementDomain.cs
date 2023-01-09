@@ -13,7 +13,7 @@ namespace DailyProject_221204
     {
         const int AUTO_SAVE_INTERVAL_SECOND = 3;
 
-        public DPContext DPContext { get; } = null!;
+        public DPDomain DPDomain { get; } = null!;
 
         public EventPublisher<TaskModel> SelectEventPublisher { get; } = new();
         public EventPublisher<TaskModel> StatusUpdateEventPublisher { get; } = new();
@@ -27,12 +27,12 @@ namespace DailyProject_221204
 
         readonly List<TaskModel> _tasks = new List<TaskModel>();
 
-        public TaskManagementDomain(DPContext dpContext)
+        public TaskManagementDomain(DPDomain dpDomain)
         {
             _autoSaveTimer.Interval = TimeSpan.FromSeconds(AUTO_SAVE_INTERVAL_SECOND);
             _autoSaveTimer.Start();
 
-            DPContext = dpContext;
+            DPDomain = dpDomain;
         }
 
         public void Dispose()

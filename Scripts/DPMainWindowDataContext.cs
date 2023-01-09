@@ -4,9 +4,9 @@ namespace DailyProject_221204
 {
     public class MainWindowDataContext : AbstractWindowDataContext
     {
-        readonly DPContext _dpContext = null!;
+        readonly DPDomain _dpContext = null!;
 
-        public MainWindowDataContext(DPContext dpContext)
+        public MainWindowDataContext(DPDomain dpContext)
         {
             _dpContext = dpContext;
         }
