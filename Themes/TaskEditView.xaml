@@ -20,8 +20,6 @@
 
                         <TabControl
                             Margin="2"
-                            Background="#FF2D2D2D"
-                            BorderThickness="0"
                             DockPanel.Dock="Top"
                             >
 
@@ -63,7 +61,7 @@
                                         </Separator>
 
                                         <Label
-                                            Content="タスクの状態"
+                                            Content="分類"
                                             Foreground="White"
                                             >
 
@@ -145,7 +143,7 @@
                                                 >
 
                                                 <Label
-                                                    Content="タスク開始日"
+                                                    Content="開始日"
                                                     Foreground="White"
                                                     >
 

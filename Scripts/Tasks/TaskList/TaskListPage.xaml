@@ -28,10 +28,7 @@
 
         <Grid Margin="2">
 
-            <TabControl
-                Background="#FF2D2D2D"
-                BorderThickness="0"
-                >
+            <TabControl>
 
                 <TabItem Header="タスク">
 
@@ -50,6 +47,7 @@
 
                                         <DailyProject_221204:TaskListItemView
                                             TaskBackgroundColor="{Binding BackgroundColor}"
+                                            TaskStatusText="タスクの状態"
                                             TaskTitleClickCommand="{Binding SelectEventCommand}"
                                             TaskTitleText="{Binding Model.Name}"
                                             >
@@ -70,7 +68,7 @@
                                         </DailyProject_221204:TaskListItemView>
 
                                         <Separator
-                                            Height="2"
+                                            Height="0"
                                             Opacity="0"
                                             >
 

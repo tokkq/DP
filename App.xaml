@@ -71,6 +71,50 @@
 
         </Style>
 
+        <Style TargetType="{x:Type TabItem}">
+
+            <Setter Property="Padding" Value="4">
+
+            </Setter>
+
+            <Setter Property="Height" Value="36">
+
+            </Setter>
+
+            <Setter Property="Width" Value="128">
+
+            </Setter>
+
+            <Setter Property="Foreground" Value="White">
+
+            </Setter>
+
+            <Setter Property="Background" Value="#FF3F3F3F">
+
+            </Setter>
+
+            <Setter Property="BorderBrush" Value="Black">
+
+            </Setter>
+
+        </Style>
+
+        <Style TargetType="{x:Type TabControl}">
+
+            <Setter Property="Background" Value="#FF2D2D2D">
+
+            </Setter>
+
+            <Setter Property="BorderBrush" Value="Black">
+
+            </Setter>
+
+            <Setter Property="BorderThickness" Value="2">
+
+            </Setter>
+
+        </Style>
+
         <local:DivideConverter x:Key="DivideConverter" />
 
     </Application.Resources>
