@@ -5,7 +5,7 @@
     >
 
     <Style
-        x:Key="TaskListItemViewDefaultStyle"
+        x:Key="TaskListItemView"
         TargetType="{x:Type local:TaskListItemView}"
         >
 
@@ -39,8 +39,8 @@
 
                                 <Grid.ColumnDefinitions>
 
-                                    <ColumnDefinition Width="3*" />
                                     <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="0*" />
 
                                 </Grid.ColumnDefinitions>
 
@@ -69,25 +69,7 @@
                                 </Button>
 
                             </Grid>
-                            <!--
-                            <Grid Grid.Row="1" Margin="4,2,4,4" >
 
-                                <Grid.ColumnDefinitions>
-
-                                    <ColumnDefinition Width="32"/>
-                                    <ColumnDefinition Width="*"/>
-
-                                </Grid.ColumnDefinitions>
-
-                                <Image Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-
-                                </Image>
-
-                                <Button Grid.Column="1" x:Name="_taskStatusButton" Padding="4" Foreground="White" Background="#FF3F3F3F" BorderBrush="#FF252525" HorizontalContentAlignment="Left">
-
-                                </Button>
-
-                            </Grid>-->
                         </Grid>
 
                     </Border>

@@ -48,7 +48,7 @@ namespace DailyProject_221204
             var model = new GlobalHotKeyModel(key, modifierKey, action);
 
             var result = 0;
-            var hotKeyId = _getHotKeyId();
+            var hotKeyId = _generateHotKeyId();
             for (int i = 0; i < 16; i++)
             {
                 result = RegisterHotKey(_windowHandle, hotKeyId, (int)modifierKey, KeyInterop.VirtualKeyFromKey(key));
@@ -58,22 +58,24 @@ namespace DailyProject_221204
                     break;
                 }
 
-                hotKeyId = _getHotKeyId();
+                hotKeyId = _generateHotKeyId();
             }
 
             var unsubscribe = new ActionDisposer(() => _unsbscribeGlobalHotkey(hotKeyId));
 
-            if (result == 0)
+            if (result != 0)
+            {
+                Debug.WriteLine($"[key: {key}][modifierKey: {modifierKey}][hotKeyId: {hotKeyId}]グローバルホットキーを設定します。");
+
+                return unsubscribe;
+            }
+            else
             {
                 Debug.Assert(false, "GlobalHotKeyに登録するために適したIDが見つかりませんでした。");
 
                 unsubscribe = new ActionDisposer(() => Debug.WriteLine($"[key: {key}][modifierKey: {modifierKey}][hotKeyId: {hotKeyId}]登録に失敗したグローバルホットキーのDisposeが行われました。"));
                 return unsubscribe;
             }
-
-            Debug.WriteLine($"[key: {key}][modifierKey: {modifierKey}][hotKeyId: {hotKeyId}]グローバルホットキーを設定します。");
-
-            return unsubscribe;
         }
 
         public void Dispose()
@@ -93,7 +95,7 @@ namespace DailyProject_221204
             UnregisterHotKey(_windowHandle, hotKeyId);
         }
 
-        int _getHotKeyId()
+        int _generateHotKeyId()
         {
             return _idGenerator.Next(APPLICATION_MIN_HOTKEY_ID, APPLICATION_MAX_HOTKEY_ID);
         }

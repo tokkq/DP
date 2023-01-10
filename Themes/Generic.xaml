@@ -6,7 +6,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/DailyProject_221204;component/Themes/DetailedTextBoxDefaultStyle.xaml" />
-        <ResourceDictionary Source="/DailyProject_221204;component/Themes/TaskListItemViewDefaultStyle.xaml" />
+        <ResourceDictionary Source="/DailyProject_221204;component/Themes/TaskListItemView.xaml" />
         <ResourceDictionary Source="/DailyProject_221204;component/Themes/DPComboBoxStyle.xaml" />
         <ResourceDictionary Source="/DailyProject_221204;component/Themes/TaskEditView.xaml" />
     </ResourceDictionary.MergedDictionaries>
@@ -16,7 +16,7 @@
         TargetType="{x:Type local:DetailedTextBox}"
         />
     <Style
-        BasedOn="{StaticResource TaskListItemViewDefaultStyle}"
+        BasedOn="{StaticResource TaskListItemView}"
         TargetType="{x:Type local:TaskListItemView}"
         />
     <Style
